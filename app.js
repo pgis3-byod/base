@@ -12,7 +12,7 @@ if (currentGame) {
     throw new Error("Game not found");
   }
 
-  gamesEl.innerHTML = `
+  document.body.innerHTML = `
     <iframe
       src="games/${currentGame}.html"
       style="
