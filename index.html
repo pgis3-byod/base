@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>PGIS 2 - tools</title>
+<link rel="icon" type="image/x-icon" href="https://i.postimg.cc/1XJnjRTF/0937a70d8c13420e9c4d8b0dc92bddaa-free-1.png">
+
+<style>
+
+html, body {
+scroll-behavior: smooth;
+text-align:center;
+background-color:black;
+color:whitesmoke;
+}
+
+.games-area{
+background-color:rgba(0,0,0,0.1);
+display:flex;
+justify-content:center;
+gap: 40px; /* used to be 20px*/
+flex-wrap:wrap;
+position:relative;
+z-index:1;
+  padding: 30px; /* remove if bad */
+}
+
+.gamediv{
+width:200px;
+height:170px;
+background-color:rgba(0,0,0,0.3);
+background-size:cover;
+background-position:center;
+cursor:auto;
+border:1px solid #444;
+border-radius:5px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+position:relative;
+  padding: 5px; /* remove if bad */
+}
+
+  .gamediv:hover {
+        
+        box-shadow: 0 0 15px white;
+  transition: box-shadow 0.3s;
+  }
+  
+button{
+opacity:1!important;
+z-index:2;
+cursor:pointer;
+background-color:#444;
+color:whitesmoke;
+border:none;
+border-radius:4px;
+}
+
+button:hover{
+background-color:lightgray;
+color:black;
+border-radius:6px;
+}
+
+a{color:white;}
+
+#particles-js{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:0;
+pointer-events:none;
+background:transparent;
+}
+
+#search{
+width:250px;
+padding:10px 15px;
+font-size:16px;
+border:1px solid #555;
+border-radius:8px;
+background-color:rgba(0,0,0,0.6);
+color:whitesmoke;
+outline:none;
+box-shadow:0 0 5px rgba(255,255,255,0.2);
+transition:all 0.3s ease;
+}
+
+#search::placeholder{
+color:#aaa;
+}
+
+#search:focus{
+border-color:#fff;
+box-shadow:0 0 10px rgba(255,255,255,0.5);
+background-color:rgba(0,0,0,0.8);
+}
+
+.favorite-btn{
+position:absolute;
+top:10px;
+right:10px;
+}
+
+.gamediv b{
+display:inline-block;
+max-width:120px;
+text-align:center;
+}
+
+select{
+background-color:#444;
+color:whitesmoke;
+border:none;
+border-radius:4px;
+}
+
+select:focus{
+outline:none;
+box-shadow:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<div style="position:relative;z-index:1;">
+
+<h1 class="indexRemove">PGIS</h1>
+<h2>Tools</h2>
+
+<br>
+
+<a class="indexRemove" href="/" style="color:white;">Back to Homepage</a>
+
+<br><br>
+
+<input type="text" id="search" placeholder="Search for tools">
+
+<br>
+
+<select id="sort">
+<option value="old">Oldest first</option>
+<option value="new">Newest first</option>
+<option value="az">A-Z</option>
+<option value="za">Z-A</option>
+<option value="random">Random</option>
+</select>
+
+<br><br>
+
+<button id="random-game-btn">Random tool</button>
+<a href="#bottom"><button>scroll to the bottom</button></a>
+
+<br>
+
+<button id="toggle-favorites">Show Favorites</button>
+
+</div>
+
+<div class="games-area">
+
+<div data-id="1" class="gamediv"><b>Orange Unlock (Proxy)</b><img src="https://i.postimg.cc/vZhqM0dZ/Design-uten-navn-9.png" width="100" height="100"><a href="orangeunlock.html"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="2" class="gamediv"><b>8os</b><img src="/assets/8os.png" width="100" height="100"><a href="https://8os.neocities.org/" target="_blank"><button>try 8os</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="3" class="gamediv"><b>Live Chat (E)</b><img src="https://i.postimg.cc/DyFh2dgb/Design-uten-navn1.png" width="100" height="100"><a href="/chat"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="4" class="gamediv"><b>YouTube shorts</b><img src="https://i.postimg.cc/sDQ32GRS/You-Tube-SHORTS-(1).png" width="100" height="100"><a href="/youtube"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="5" class="gamediv"><b>EmulatorJS</b><img src="https://i.postimg.cc/TwJpCLPW/Design-uten-navn-(1).png" width="100" height="100"><a href="/emulator"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="6" class="gamediv"><b>PGIS bot (AI)</b><img src="https://files.jotform.com/jufs/0800webtest%2Fagent_files%2Favatar_images%2FDesign_uten_navn_3_-removebg-preview-69e23147650164.70230864-69e23154b02600.08893058-69e2316f683ee4.25142685-69e2318a26bc86.98296654.png?md5=iTqfYgtfaydSUqGyqL8Mqg&expires=1776593756" width="100" height="100"><a href="/AI"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="7" class="gamediv"><b>Live HTML Editor</b><img src="https://i.postimg.cc/W41NwbnC/Live-HTML-Editor.png" width="100" height="100"><a href="/htmleditor"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="8" class="gamediv"><b>The Wagon Site (E)</b><img src="https://the-wagonization.github.io/The-Wagon-Site/Images/PlaceholderBear.png" width="100" height="100"><a href="/thewagonsite.html"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="9" class="gamediv"><b>Soundboard</b><img src="https://i.postimg.cc/kg8KPwPr/Skjermbilde-2026-02-22-123510.png" width="100" height="100"><a href="/soundboard"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="10" class="gamediv"><b>Github Search</b><img src="https://i.postimg.cc/htJy3MRP/Skjermbilde-2026-02-22-182527.png" width="100" height="100"><a href="/githubsearch"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="11" class="gamediv"><b>Helios Proxy</b><img src="https://i.postimg.cc/J4tW39Kt/Skjermbilde-2026-02-22-183543.png" width="100" height="100"><a href="/helios"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="12" class="gamediv"><b>movies (WORKING)</b><img src="https://i.postimg.cc/tJmq9yRn/Skjermbilde-2026-02-22-191025.png" width="100" height="100"><a href="/movies"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="13" class="gamediv"><b>DOS Wasm X</b><img src="https://i.postimg.cc/VkFyX7Rq/Skjermbilde-2026-02-23-192334.png" width="100" height="100"><a href="/doswx"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="14" class="gamediv"><b>SCRATCH LAUNCHER</b><img src="https://i.postimg.cc/qBnHFQGH/Screenshot-20260225-162229-Drive.jpg" width="100" height="100"><a href="/scratch/index.html"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="15" class="gamediv"><b>URL Cloaker</b><img src="https://i.postimg.cc/50Y3f9yZ/ABOUTBLANK.png" width="100" height="100"><a href="/cloak"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="16" class="gamediv"><b>Full YouTube</b><img src="https://i.postimg.cc/yYqRSXpP/youtube.png" width="100" height="100"><a href="/youtube.html" target="_blank"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="17" class="gamediv"><b>Sandstone Proxy</b><img src="https://upload.wikimedia.org/wikipedia/commons/a/af/USDA_Mineral_Sandstone_93c3955.jpg" width="100" height="100"><a href="/sandstone"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="18" class="gamediv"><b>Ultimate Game Stash Files</b><img src="https://i.postimg.cc/CLdq31K3/Screenshot-20260331-154401-Drive.jpg" width="100" height="100"><a href="/ugsfiles"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="19" class="gamediv"><b>CPS Tester</b><img src="https://i.postimg.cc/D0Pzz7b4/CPS.png" width="100" height="100"><a href="/cps"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="20" class="gamediv"><b>Code.org offline (from the UGS)</b><img src="https://i.postimg.cc/ydXKmv6b/Code-org-logo.png" width="100" height="100"><a href="/codeorg"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="21" class="gamediv"><b>UBGdir</b><img src="https://0800WebDev.github.io/UBGdir/logo.png" width="100" height="100"><a href="https://0800webdev.github.io/UBGdir/" target="_blank"><button>try UBGdir</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="22" class="gamediv"><b>Ghub</b><img src="https://i.postimg.cc/LsrPqtwy/Screenshot-20260411-190513-Barcode-Guru.jpg" width="100" height="100"><a href="/ghub"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="23" class="gamediv"><b>Coreus (partner)</b><img src="https://n00dle.is-a.dev/coreus/icon.svg" width="100" height="100"><a href="https://n00dle.is-a.dev/coreus/" target="_blank"><button>try coreus</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="24" class="gamediv"><b>P G I S    p r o x y</b><img src="https://https://homework--spmspy0800.replit.app/logo.png" width="100" height="100"><a href="/browserproxy"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+<div data-id="25" class="gamediv"><b>gn-math</b><img src="" width="100" height="100"><a href="/gn-math"><button>open</button></a><button class="favorite-btn">☆</button></div>
+
+
+</div>
+
+<div id="bottom"></div>
+
+<script>
+  const buttons = document.querySelectorAll("button");
+
+buttons.forEach(btn => {
+  btn.addEventListener("mousemove", e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const moveX = (x - rect.width / 2) * 0.3;
+    const moveY = (y - rect.height / 2) * 0.3;
+
+    btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    btn.style.transform = "translate(0,0)";
+  });
+});
+</script>
+  
+<script>
+
+document.querySelectorAll("button").forEach(btn=>{
+if(btn.textContent.trim()==="open"||btn.textContent.trim()==="try 8os" ||btn.textContent.trim()==="try coreus" ||btn.textContent.trim()==="try UBGdir"){
+btn.style.width="120px"
+}
+})
+
+</script>
+
+<script>
+
+const placeholder="placeholder.png"
+
+document.querySelectorAll("img").forEach(img=>{
+
+img.addEventListener("error",function(){
+if(this.src!==placeholder){
+this.src=placeholder
+}
+})
+
+if(!img.getAttribute("src")){
+img.src=placeholder
+}
+
+})
+
+</script>
+
+<script>
+
+const favorites=new Set(JSON.parse(localStorage.getItem("toolFavorites")||"[]"))
+
+const favoriteButtons=document.querySelectorAll('.favorite-btn')
+const items=document.querySelectorAll('.gamediv')
+
+items.forEach(item=>{
+const id=item.dataset.id
+const btn=item.querySelector('.favorite-btn')
+
+if(favorites.has(id)){
+btn.textContent='★'
+}
+})
+
+favoriteButtons.forEach(btn=>{
+btn.addEventListener('click',()=>{
+
+const itemDiv=btn.parentElement
+const id=itemDiv.dataset.id
+
+if(favorites.has(id)){
+favorites.delete(id)
+btn.textContent='☆'
+}else{
+favorites.add(id)
+btn.textContent='★'
+}
+
+localStorage.setItem("toolFavorites",JSON.stringify([...favorites]))
+
+})
+})
+
+let showingFavorites=false
+const toggleBtn=document.getElementById("toggle-favorites")
+
+toggleBtn.addEventListener("click",()=>{
+
+showingFavorites=!showingFavorites
+
+items.forEach(item=>{
+
+if(showingFavorites){
+item.style.display=favorites.has(item.dataset.id)?'':'none'
+}else{
+item.style.display=''
+}
+
+})
+
+toggleBtn.textContent=showingFavorites?"Show All":"Show Favorites"
+
+})
+
+</script>
+
+<script>
+
+document.getElementById("random-game-btn").addEventListener("click",()=>{
+
+const links=Array.from(document.querySelectorAll(".games-area a"))
+
+if(links.length>0){
+
+const randomLink=links[Math.floor(Math.random()*links.length)]
+
+window.location.href=randomLink.href
+
+<script src="main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script>
+
+particlesJS('particles-js',{
+"particles":{
+"number":{"value":100,"density":{"enable":true,"value_area":800}},
+"color":{"value":"#ffffff"},
+"shape":{"type":"circle"},
+"opacity":{"value":0.08,"random":true},
+"size":{"value":3,"random":true},
+"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},
+"move":{"enable":true,"speed":1.5,"direction":"none","straight":false,"out_mode":"out"}
+},
+"interactivity":{
+"detect_on":"window",
+"events":{"onhover":{"enable":true,"mode":"repulse"},"onclick":{"enable":false}},
+"modes":{"repulse":{"distance":120,"duration":0.5}}
+},
+"retina_detect":true
+})
+
+</script>
+
+<script>
+
+const searchInput=document.getElementById('search')
+const gameDivs=document.querySelectorAll('.gamediv')
+
+searchInput.addEventListener('input',()=>{
+
+const query=searchInput.value.toLowerCase()
+
+gameDivs.forEach(div=>{
+
+const gameName=div.querySelector('b').textContent.toLowerCase()
+
+if(gameName.includes(query)||query===''){
+div.style.display='flex'
+}else{
+div.style.display='none'
+}
+
+})
+
+})
+
+</script>
+
+<script>
+
+const sortSelect=document.getElementById("sort")
+const container=document.querySelector(".games-area")
+
+sortSelect.addEventListener("change",function(){
+
+let tools=Array.from(container.querySelectorAll(".gamediv"))
+
+if(this.value==="az"){
+tools.sort((a,b)=>a.querySelector("b").innerText.localeCompare(b.querySelector("b").innerText))
+}
+
+if(this.value==="za"){
+tools.sort((a,b)=>b.querySelector("b").innerText.localeCompare(a.querySelector("b").innerText))
+}
+
+if(this.value==="new"){
+tools.sort((a,b)=>Number(b.dataset.id)-Number(a.dataset.id))
+}
+
+if(this.value==="old"){
+tools.sort((a,b)=>Number(a.dataset.id)-Number(b.dataset.id))
+}
+
+if(this.value==="random"){
+tools.sort(()=>Math.random()-0.5)
+}
+
+tools.forEach(tool=>container.appendChild(tool))
+
+})
+
+</script>
+
+</body>
+</html>     
