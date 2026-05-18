@@ -15,7 +15,18 @@ background-color:black;
 color:whitesmoke;
 }
 
-.card{
+.games{
+background-color:rgba(0,0,0,0.1);
+display:flex;
+justify-content:center;
+gap: 40px; /* used to be 20px*/
+flex-wrap:wrap;
+position:relative;
+z-index:1;
+  padding: 30px; /* remove if bad */
+}
+
+.gamediv{
 width:200px;
 height:170px;
 background-color:rgba(0,0,0,0.3);
@@ -32,7 +43,7 @@ position:relative;
   padding: 5px; /* remove if bad */
 }
 
-  .card:hover {
+  .gamediv:hover {
         
         box-shadow: 0 0 15px white;
   transition: box-shadow 0.3s;
