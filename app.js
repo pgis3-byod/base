@@ -43,7 +43,7 @@ function openFullscreen() {
     win.document.close();
   };
         </script>
-        <button id="cloakBtn" style="position: fixed; top: 20px; left: 548px; z-index: 99999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;">Cloak tab</button>
+        <button id="cloakBtn" style="position: fixed; top: 20px; left: 548px; z-index: 99999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" onClick="cloakTab()">Cloak tab</button>
         <script>
         function cloakTab() {
   const btn = document.getElementById("cloakBtn");
