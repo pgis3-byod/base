@@ -27,15 +27,6 @@ if (currentGame) {
   `;
 } else {
   gamesEl.innerHTML = games.map(game => `
-    <a
-      href="?game=${game}"
-      style="
-        display:block;
-        margin:10px;
-        font-size:24px;
-      "
-    >
-      ${game}
-    </a>
+    <div class="gamediv"><b>${game}</b><img src="" alt="game image" width="100px" height="100px"><a href="?game=${game}"><button>play</button></a> <button class="favorite-btn">☆</button></div>
   `).join("");
 }
