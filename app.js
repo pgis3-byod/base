@@ -1,4 +1,4 @@
-const gamesEl = document.body;
+const gamesEl = document.getElementById("games");
 
 const games = await fetch("games.json")
   .then(r => r.json());
