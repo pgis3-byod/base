@@ -13,7 +13,7 @@ if (currentGame) {
   }
 
   document.body.innerHTML = `
-  <div style="text-align: center; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial;">
+  <div style="text-align: left; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial;">
       <a href="/" style="color: white;">← Back to Homepage</a><h3 style="text-align: center;">PGIS</h3>
       </div>
         <iframe id="frame" src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
