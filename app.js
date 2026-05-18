@@ -14,7 +14,7 @@ if (currentGame) {
 
   document.body.innerHTML = `
       <a href="/" style="color: white;">← Back to Homepage</a><h3 style="text-align: center;">PGIS</h3>
-        <iframe src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="${game}"></iframe>
+        <iframe src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
   `;
 } else {
   gamesEl.innerHTML = games.map(game => `
