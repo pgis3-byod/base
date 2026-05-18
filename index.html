@@ -172,65 +172,8 @@ particlesJS('particles-js',{
 
 </script>
 
-<script>
 
-const searchInput=document.getElementById('search')
-const gameDivs=document.querySelectorAll('.gamediv')
 
-searchInput.addEventListener('input',()=>{
-
-const query=searchInput.value.toLowerCase()
-
-gameDivs.forEach(div=>{
-
-const gameName=div.querySelector('b').textContent.toLowerCase()
-
-if(gameName.includes(query)||query===''){
-div.style.display='flex'
-}else{
-div.style.display='none'
-}
-
-})
-
-})
-
-</script>
-
-<script>
-
-const sortSelect=document.getElementById("sort")
-const container=document.querySelector(".games-area")
-
-sortSelect.addEventListener("change",function(){
-
-let tools=Array.from(container.querySelectorAll(".gamediv"))
-
-if(this.value==="az"){
-tools.sort((a,b)=>a.querySelector("b").innerText.localeCompare(b.querySelector("b").innerText))
-}
-
-if(this.value==="za"){
-tools.sort((a,b)=>b.querySelector("b").innerText.localeCompare(a.querySelector("b").innerText))
-}
-
-if(this.value==="new"){
-tools.sort((a,b)=>Number(b.dataset.id)-Number(a.dataset.id))
-}
-
-if(this.value==="old"){
-tools.sort((a,b)=>Number(a.dataset.id)-Number(b.dataset.id))
-}
-
-if(this.value==="random"){
-tools.sort(()=>Math.random()-0.5)
-}
-
-tools.forEach(tool=>container.appendChild(tool))
-
-})
-
-</script>
 
 </body>
 </html>     
