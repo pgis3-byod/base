@@ -13,8 +13,9 @@ if (currentGame) {
   }
 
   document.body.innerHTML = `
-  <div style="margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial;">
+  <div style="text-align: center; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial;">
       <a href="/" style="color: white;">← Back to Homepage</a><h3 style="text-align: center;">PGIS</h3>
+      </div>
         <iframe id="frame" src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
 
         <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" >Fullscreen</button>
