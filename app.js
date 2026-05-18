@@ -18,19 +18,23 @@ if (currentGame) {
       </div>
         <iframe id="frame" src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
 
-        <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" onClick="openFullscreen()">Fullscreen</button>
-        <script>
-function openFullscreen() {
+        <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;">Fullscreen</button>
+   <script>
+window.openFullscreen = function () {
   const iframe = document.getElementById("frame");
-  
+
   if (iframe.requestFullscreen) {
     iframe.requestFullscreen();
-  } else if (iframe.webkitRequestFullscreen) { /* Safari */
+  } else if (iframe.webkitRequestFullscreen) {
     iframe.webkitRequestFullscreen();
-  } else if (iframe.msRequestFullscreen) { /* IE11 */
+  } else if (iframe.msRequestFullscreen) {
     iframe.msRequestFullscreen();
   }
-}
+};
+
+document
+  .getElementById("fullscreenBtn")
+  .addEventListener("click", openFullscreen);
 </script>
         <button style="position: fixed; top: 20px; left: 410px; z-index: 999999; background: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px; border: medium; cursor: pointer;" onClick="loadUrl()">Open in about:blank</button>
         <script>
