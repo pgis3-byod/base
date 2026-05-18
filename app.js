@@ -18,6 +18,6 @@ if (currentGame) {
   `;
 } else {
   gamesEl.innerHTML = games.map(game => `
-    <div class="gamediv"><b>${game}</b><img src="${currentGame}.png" alt="game image" width="100px" height="100px"><a href="?game=${game}"><button>play</button></a></div>
+    <div class="gamediv"><b>${game}</b><img src="games/${game}.png" alt="game image" width="100px" height="100px"><a href="?game=${game}"><button>play</button></a></div>
   `).join("");
 }
