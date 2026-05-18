@@ -18,7 +18,7 @@ if (currentGame) {
       </div>
         <iframe id="frame" src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
 
-        <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" >Fullscreen</button>
+        <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" onClick="openFullscreen()">Fullscreen</button>
         <script>
 function openFullscreen() {
   const iframe = document.getElementById("frame");
@@ -32,7 +32,7 @@ function openFullscreen() {
   }
 }
 </script>
-        <button style="position: fixed; top: 20px; left: 410px; z-index: 999999; background: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px; border: medium; cursor: pointer;">Open in about:blank</button>
+        <button style="position: fixed; top: 20px; left: 410px; z-index: 999999; background: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px; border: medium; cursor: pointer;" onClick="loadUrl()">Open in about:blank</button>
         <script>
       function loadUrl() {
         const win = window.open("about:blank");
