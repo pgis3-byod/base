@@ -2,15 +2,21 @@ const gamesEl = document.getElementById("games");
 
 let games = [];
 
-window.loadGames = async function () {
+const params = new URLSearchParams(location.search);
+const currentGame = params.get("game");
+
+async function getGames() {
   if (!games.length) {
     games = await fetch("games.json").then(r => r.json());
   }
 
-  const params = new URLSearchParams(location.search);
-  const currentGame = params.get("game");
+  return games;
+}
 
-  if (currentGame) {
+if (currentGame) {
+  (async () => {
+    const games = await getGames();
+
     if (!games.includes(currentGame)) {
       document.body.innerHTML = "Game not found";
       throw new Error("Game not found");
@@ -118,19 +124,23 @@ window.loadGames = async function () {
     }
 
     cloakTab();
-  } else {
-    gamesEl.innerHTML = games.map(game => `
-      <div class="gamediv">
-        <b>${game}</b>
-        <img
-          src="games/${game}.png"
-          alt="game image"
-          width="100"
-          height="100">
-        <a href="?game=${game}">
-          <button>play</button>
-        </a>
-      </div>
-    `).join("");
-  }
+  })();
+}
+
+window.loadGames = async function () {
+  const games = await getGames();
+
+  gamesEl.innerHTML = games.map(game => `
+    <div class="gamediv">
+      <b>${game}</b>
+      <img
+        src="games/${game}.png"
+        alt="game image"
+        width="100"
+        height="100">
+      <a href="?game=${game}">
+        <button>play</button>
+      </a>
+    </div>
+  `).join("");
 };
