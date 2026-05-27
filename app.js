@@ -1,102 +1,127 @@
-function loadGames() {
-
 const gamesEl = document.getElementById("games");
 
-const games = await fetch("games.json")
-  .then(r => r.json());
+let games = [];
 
-const params = new URLSearchParams(location.search);
-const currentGame = params.get("game");
-
-if (currentGame) {
-  if (!games.includes(currentGame)) {
-    document.body.innerHTML = "Game not found";
-    throw new Error("Game not found");
+async function loadGames() {
+  if (!games.length) {
+    games = await fetch("games.json").then(r => r.json());
   }
 
-  document.body.innerHTML = `
-  <div style="text-align: left; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial; gap: 12px;">
-      <a href="/" style="color: white;">← Back to Homepage </a>
-      <a href="games/${currentGame}.html" download> Download game</a><h3 style="text-align: center;">PGIS</h3>
-      </div>
-        <iframe id="frame" src="games/${currentGame}.html" style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"  title="game"></iframe>
+  const params = new URLSearchParams(location.search);
+  const currentGame = params.get("game");
 
-        <button id="fullscreenBtn" style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;">Fullscreen</button>
-   <script>
-window.openFullscreen = function () {
-  const iframe = document.getElementById("frame");
-
-  if (iframe.requestFullscreen) {
-    iframe.requestFullscreen();
-  } else if (iframe.webkitRequestFullscreen) {
-    iframe.webkitRequestFullscreen();
-  } else if (iframe.msRequestFullscreen) {
-    iframe.msRequestFullscreen();
-  }
-};
-
-document
-  .getElementById("fullscreenBtn")
-  .addEventListener("click", openFullscreen);
-</script>
-        <button style="position: fixed; top: 20px; left: 410px; z-index: 999999; background: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px; border: medium; cursor: pointer;" onClick="loadUrl()">Open in about:blank</button>
-        <script>
-      function loadUrl() {
-        const win = window.open("about:blank");
-    if (!win) return;
-
-    win.document.open();
-    win.document.write(document.documentElement.outerHTML);
-    win.document.close();
-  };
-        </script>
-        <button id="cloakBtn" style="position: fixed; top: 20px; left: 548px; z-index: 99999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;" onClick="cloakTab()">Cloak tab</button>
-        <script>
-        function cloakTab() {
-  const btn = document.getElementById("cloakBtn");
-
-  let toggled = false;
-
-  const originalTitle = document.title;
-
-  function setFavicon(url) {
-    let link =
-      document.querySelector("link[rel~='icon']") ||
-      document.createElement("link");
-
-    link.type = "image/x-icon";
-    link.rel = "icon";
-    link.href = url;
-
-    document.head.appendChild(link);
-  }
-
-  const originalFavicon =
-    document.querySelector("link[rel~='icon']")?.href || "";
-
-  btn.onclick = function () {
-    toggled = !toggled;
-
-    if (toggled) {
-      document.title = "Google Classroom";
-
-      setFavicon(
-        "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://staticin.pages.dev/settings&size=16"
-      );
-    } else {
-      document.title = originalTitle;
-      setFavicon(originalFavicon);
+  if (currentGame) {
+    if (!games.includes(currentGame)) {
+      document.body.innerHTML = "Game not found";
+      throw new Error("Game not found");
     }
-  };
-}
 
-cloakTab();
-        </script>
-  </div>
-        `;
-} else {
-  gamesEl.innerHTML = games.map(game => `
-    <div class="gamediv"><b>${game}</b><img src="games/${game}.png" alt="game image" width="100px" height="100px"><a href="?game=${game}"><button>play</button></a></div>
-  `).join("");
-}
+    document.body.innerHTML = `
+    <div style="text-align: left; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial; gap: 12px;">
+      <a href="/" style="color: white;">← Back to Homepage </a>
+      <a href="games/${currentGame}.html" download>Download game</a>
+      <h3 style="text-align: center;">PGIS</h3>
+    </div>
+
+    <iframe
+      id="frame"
+      src="games/${currentGame}.html"
+      style="height: 638px; width: 100%; max-width: 1500px; border: none; display: block; margin: 20px auto;"
+      title="game">
+    </iframe>
+
+    <button
+      id="fullscreenBtn"
+      style="position: fixed; top: 20px; left: 330px; z-index: 999999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;">
+      Fullscreen
+    </button>
+
+    <button
+      style="position: fixed; top: 20px; left: 410px; z-index: 999999; background: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px; border: medium; cursor: pointer;"
+      onclick="loadUrl()">
+      Open in about:blank
+    </button>
+
+    <button
+      id="cloakBtn"
+      style="position: fixed; top: 20px; left: 548px; z-index: 99999; border: medium; cursor: pointer; background-color: rgb(68, 68, 68); color: whitesmoke; border-radius: 5px;">
+      Cloak tab
+    </button>
+    `;
+
+    window.openFullscreen = function () {
+      const iframe = document.getElementById("frame");
+
+      if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+      } else if (iframe.webkitRequestFullscreen) {
+        iframe.webkitRequestFullscreen();
+      } else if (iframe.msRequestFullscreen) {
+        iframe.msRequestFullscreen();
+      }
+    };
+
+    document
+      .getElementById("fullscreenBtn")
+      .addEventListener("click", openFullscreen);
+
+    window.loadUrl = function () {
+      const win = window.open("about:blank");
+      if (!win) return;
+
+      win.document.open();
+      win.document.write(document.documentElement.outerHTML);
+      win.document.close();
+    };
+
+    function cloakTab() {
+      const btn = document.getElementById("cloakBtn");
+
+      let toggled = false;
+
+      const originalTitle = document.title;
+
+      function setFavicon(url) {
+        let link =
+          document.querySelector("link[rel~='icon']") ||
+          document.createElement("link");
+
+        link.type = "image/x-icon";
+        link.rel = "icon";
+        link.href = url;
+
+        document.head.appendChild(link);
+      }
+
+      const originalFavicon =
+        document.querySelector("link[rel~='icon']")?.href || "";
+
+      btn.onclick = function () {
+        toggled = !toggled;
+
+        if (toggled) {
+          document.title = "Google Classroom";
+
+          setFavicon(
+            "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://staticin.pages.dev/settings&size=16"
+          );
+        } else {
+          document.title = originalTitle;
+          setFavicon(originalFavicon);
+        }
+      };
+    }
+
+    cloakTab();
+  } else {
+    gamesEl.innerHTML = games.map(game => `
+      <div class="gamediv">
+        <b>${game}</b>
+        <img src="games/${game}.png" alt="game image" width="100px" height="100px">
+        <a href="?game=${game}">
+          <button>play</button>
+        </a>
+      </div>
+    `).join("");
+  }
 }
