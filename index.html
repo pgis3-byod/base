@@ -96,14 +96,13 @@ iframe {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    border-radius: 3px;
+    border-radius: 7px;
   
     
    
   }
   .icon {
-    height: 20vh;
-  }
+height: clamp(30px, 0.5vw, 100px);  }
   #home {
     text-align: left;
   }
@@ -124,27 +123,7 @@ iframe {
 <div id="menu"><button id="home"><img src="/assets/home.png" class="icon"></button> <button onclick="loadGames()"><img src="/assets/games.png" class="icon"></button></div>
 <div id="bottom"></div>
 
-<script>
-  const buttons = document.querySelectorAll("button");
 
-buttons.forEach(btn => {
-  btn.addEventListener("mousemove", e => {
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const moveX = (x - rect.width / 2) * 0.3;
-    const moveY = (y - rect.height / 2) * 0.3;
-
-    btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-  });
-
-  btn.addEventListener("mouseleave", () => {
-    btn.style.transform = "translate(0,0)";
-  });
-});
-</script>
-  
 <script>
 
 document.querySelectorAll("button").forEach(btn=>{
