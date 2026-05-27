@@ -144,3 +144,16 @@ window.loadGames = async function () {
     </div>
   `).join("");
 };
+
+
+
+const originalHTML = document.body.innerHTML;
+
+function Home() {
+  document.body.innerHTML = originalHTML;
+}
+
+
+
+
+
