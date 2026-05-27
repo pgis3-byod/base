@@ -147,13 +147,10 @@ window.loadGames = async function () {
 
 
 
-async function Home() {
+window.Home = async function () {
   const html = await fetch("/index.html").then(r => r.text());
-
   const doc = new DOMParser().parseFromString(html, "text/html");
-  const content = doc.getElementById("games");
 
-  document.getElementById("games").innerHTML = content.innerHTML;
-}
-
-
+  document.getElementById("games").innerHTML =
+    doc.getElementById("games").innerHTML;
+};
