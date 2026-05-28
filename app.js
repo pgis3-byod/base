@@ -138,7 +138,7 @@ window.loadGames = async function () {
         alt="game image"
         width="100"
         height="100">
-      <a href="?game=${game}">
+      <a href="?lesson=${game}">
         <button>play</button>
       </a>
     </div>
