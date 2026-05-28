@@ -3,7 +3,7 @@ const gamesEl = document.getElementById("games");
 let games = [];
 
 const params = new URLSearchParams(location.search);
-const currentGame = params.get("game");
+const currentGame = params.get("lesson");
 
 async function getGames() {
   if (!games.length) {
