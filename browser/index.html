@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Browser</title>
+
+<link rel="manifest" href="/browser/manifest.json">
+
+<style>
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: white;
+    font-family: Arial;
+}
+
+#status {
+    padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<div id="status">Loading...</div>
+
+<script>
+async function start() {
+    const status = document.getElementById("status")
+
+    if (!("serviceWorker" in navigator)) {
+        status.textContent = "Service Workers unsupported"
+        return
+    }
+
+    try {
+        const reg = await navigator.serviceWorker.register("/browser/sw.js", {
+            scope: "/browser/"
+        })
+
+        await navigator.serviceWorker.ready
+
+        status.textContent = "Service Worker ready"
+
+        console.log("SW registered:", reg)
+    } catch (err) {
+        console.error(err)
+        status.textContent = "SW failed: " + err
+    }
+}
+
+start()
+</script>
+
+</body>
+</html>
