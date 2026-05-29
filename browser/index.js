@@ -58,14 +58,14 @@ const scramjet = new ScramjetController({
     prefix: "/scramjet/",
     codec: getCodec(isCodecEnabled()),
     files: {
-        wasm: "scram/scramjet.wasm.wasm",
-        all: "scram/scramjet.all.js",
-        sync: "scram/scramjet.sync.js",
+        wasm: "https://homework--spmspy0800.replit.app/scram/scramjet.wasm.wasm",
+        all: "https://homework--spmspy0800.replit.app/scram/scramjet.all.js",
+        sync: "https://homework--spmspy0800.replit.app/scram/scramjet.sync.js",
     },
 });
 scramjet.init();
 
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+const connection = new BareMux.BareMuxConnection("baremux/worker.js");
 
 function injectToggleButton() {
     const existing = document.getElementById("codec-toggle-btn");
