@@ -2,32 +2,18 @@
 <html>
 <body>
 
-<div id="status">Booting...</div>
+<div id="app">Loading...</div>
 
 <script>
 (async () => {
-    const status = document.getElementById("status")
+    await navigator.serviceWorker.register("/browser/sw.js", {
+        scope: "/browser/"
+    })
 
-    try {
-        const reg = await navigator.serviceWorker.register("/browser/sw.js", {
-            scope: "/browser/"
-        })
+    await navigator.serviceWorker.ready
 
-        await navigator.serviceWorker.ready
-
-        status.textContent = "SW active"
-
-        // force activation control
-        if (navigator.serviceWorker.controller === null) {
-            status.textContent = "Reloading for control..."
-            location.reload()
-            return
-        }
-
-        status.textContent = "Ready (Scramjet runtime loaded)"
-    } catch (e) {
-        status.textContent = "SW failed: " + e
-    }
+    // THIS is what you are missing
+    await import("https://homework--spmspy0800.replit.app/app.js")
 })()
 </script>
 
