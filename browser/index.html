@@ -29,6 +29,7 @@ html, body {
 <div id="app">Loading...</div>
 
 <script>
+    alert("test1")
 (async () => {
     await navigator.serviceWorker.register("/browser/sw.js", {
         scope: "/browser/"
@@ -39,6 +40,7 @@ html, body {
     // THIS is what you are missing
     await import("https://homework--spmspy0800.replit.app/app.js")
 })()
+   alert("test2")
 </script>
 
 </body>
