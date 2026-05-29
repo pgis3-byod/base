@@ -29,18 +29,11 @@ html, body {
 <div id="app">Loading...</div>
 
 <script>
-    alert("test1")
-(async () => {
-    await navigator.serviceWorker.register("/browser/sw.js", {
-        scope: "/browser/"
-    })
+    console.log("page JS running")
 
-    await navigator.serviceWorker.ready
-
-    // THIS is what you are missing
-    await import("https://homework--spmspy0800.replit.app/app.js")
-})()
-   alert("test2")
+navigator.serviceWorker.register("/browser/sw.js")
+    .then(() => console.log("SW registered"))
+    .catch(err => console.log("SW failed", err))
 </script>
 
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
