@@ -8,8 +8,6 @@
 const BACKEND = "https://homework--spmspy0800.replit.app"
 
 async function start() {
-    const app = document.getElementById("app")
-
     try {
         // 1. register SW (Scramjet stays untouched)
         if ("serviceWorker" in navigator) {
@@ -20,21 +18,28 @@ async function start() {
             await navigator.serviceWorker.ready
         }
 
-        // 2. load REAL frontend HTML
-        const html = await fetch(BACKEND + "/").then(r => r.text())
+        // 2. fetch backend HTML
+        let html = await fetch(BACKEND + "/").then(r => r.text())
 
-        // 3. replace page with backend frontend
+        // 3. fix asset paths (CRITICAL PART)
+        html = html.replace(
+            /<head>/i,
+            `<head><base href="${BACKEND}/">`
+        )
+
+        // 4. inject HTML into page
         document.open()
         document.write(html)
         document.close()
 
-        // 4. load frontend JS if it exists separately
+        // 5. force-load JS AFTER DOM exists
         const script = document.createElement("script")
         script.src = BACKEND + "/index.js"
+        script.defer = true
         document.body.appendChild(script)
 
     } catch (err) {
-        app.textContent = "Failed to load app: " + err
+        document.body.innerHTML = "Failed: " + err
     }
 }
 
