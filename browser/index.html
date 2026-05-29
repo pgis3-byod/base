@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>browser</title>
 </head>
 
 <body>
@@ -13,8 +12,14 @@ const BACKEND = "https://homework--spmspy0800.replit.app"
 
 async function start() {
     try {
-        // Register Site A Service Worker ONLY
+
+        // FORCE only Site A SW
         if ("serviceWorker" in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations()
+            for (const reg of regs) {
+                await reg.unregister()
+            }
+
             await navigator.serviceWorker.register("/browser/sw.js", {
                 scope: "/browser/"
             })
@@ -22,10 +27,10 @@ async function start() {
             await navigator.serviceWorker.ready
         }
 
-        // Fetch Site B frontend
+        // Load backend HTML
         let html = await fetch(BACKEND + "/").then(r => r.text())
 
-        // Fix asset paths so everything points to Site B
+        // Fix asset base
         html = html.replace(
             /<head>/i,
             `<head><base href="${BACKEND}/">`
@@ -35,13 +40,13 @@ async function start() {
         document.write(html)
         document.close()
 
-        // Load Site B JS entry
+        // Load backend JS explicitly
         const script = document.createElement("script")
         script.src = BACKEND + "/index.js"
         document.body.appendChild(script)
 
     } catch (err) {
-        document.getElementById("app").textContent = "Failed: " + err
+        document.body.innerHTML = "Failed: " + err
     }
 }
 
