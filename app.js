@@ -155,7 +155,7 @@ window.Home = async function () {
     doc.getElementById("games").innerHTML;
 };
 
-window.Home = async function () {
+window.test = async function () {
   
     document.getElementById("games").innerHTML = 
       '
