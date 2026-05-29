@@ -2,33 +2,43 @@
 <html>
 <body>
 
-<div id="status">Booting...</div>
+<div id="app">Loading app...</div>
 
 <script>
-(async () => {
-    const status = document.getElementById("status")
+const BACKEND = "https://homework--spmspy0800.replit.app"
+
+async function start() {
+    const app = document.getElementById("app")
 
     try {
-        const reg = await navigator.serviceWorker.register("/browser/sw.js", {
-            scope: "/browser/"
-        })
+        // 1. register SW (Scramjet stays untouched)
+        if ("serviceWorker" in navigator) {
+            await navigator.serviceWorker.register("/browser/sw.js", {
+                scope: "/browser/"
+            })
 
-        await navigator.serviceWorker.ready
-
-        status.textContent = "SW active"
-
-        // force activation control
-        if (navigator.serviceWorker.controller === null) {
-            status.textContent = "Reloading for control..."
-            location.reload()
-            return
+            await navigator.serviceWorker.ready
         }
 
-        status.textContent = "Ready (Scramjet runtime loaded)"
-    } catch (e) {
-        status.textContent = "SW failed: " + e
+        // 2. load REAL frontend HTML
+        const html = await fetch(BACKEND + "/").then(r => r.text())
+
+        // 3. replace page with backend frontend
+        document.open()
+        document.write(html)
+        document.close()
+
+        // 4. load frontend JS if it exists separately
+        const script = document.createElement("script")
+        script.src = BACKEND + "/index.js"
+        document.body.appendChild(script)
+
+    } catch (err) {
+        app.textContent = "Failed to load app: " + err
     }
-})()
+}
+
+start()
 </script>
 
 </body>
