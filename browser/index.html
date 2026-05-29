@@ -27,33 +27,19 @@ html, body {
 <body>
 
 <div id="status">Loading...</div>
+<div id="app">Loading...</div>
 
 <script>
-async function start() {
-    const status = document.getElementById("status")
+(async () => {
+    await navigator.serviceWorker.register("/browser/sw.js", {
+        scope: "/browser/"
+    })
 
-    if (!("serviceWorker" in navigator)) {
-        status.textContent = "Service Workers unsupported"
-        return
-    }
+    await navigator.serviceWorker.ready
 
-    try {
-        const reg = await navigator.serviceWorker.register("/browser/sw.js", {
-            scope: "/browser/"
-        })
-
-        await navigator.serviceWorker.ready
-
-        status.textContent = "Service Worker ready"
-
-        console.log("SW registered:", reg)
-    } catch (err) {
-        console.error(err)
-        status.textContent = "SW failed: " + err
-    }
-}
-
-start()
+    // THIS is what you are missing
+    await import("https://homework--spmspy0800.replit.app/app.js")
+})()
 </script>
 
 </body>
