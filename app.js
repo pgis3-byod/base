@@ -157,7 +157,7 @@ window.Home = async function () {
 
 window.proxy = async function () {
     document.getElementById("games").innerHTML = `
-      <iframe style="width: 100%; height: 100%;" src="https://homework--spmspy0800.replit.app"></iframe>
+      <iframe style="width: 100%; height: 100vh;" src="https://homework--spmspy0800.replit.app"></iframe>
     `;
 };
 
