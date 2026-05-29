@@ -1,27 +1,11 @@
-importScripts("/browser/scram/scramjet.all.js")
+self.addEventListener("install", () => {
+    self.skipWaiting()
+})
 
-const { ScramjetServiceWorker } = $scramjetLoadWorker()
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim())
+})
 
-const scramjet = new ScramjetServiceWorker()
-
-async function handleRequest(event) {
-    try {
-        await scramjet.loadConfig()
-    } catch (e) {
-        return fetch(event.request)
-    }
-
-    if (scramjet.route(event)) {
-        try {
-            return await scramjet.fetch(event)
-        } catch (e) {
-            return fetch(event.request)
-        }
-    }
-
-    return fetch(event.request)
-}
-
-self.addEventListener("fetch", event => {
-    event.respondWith(handleRequest(event))
+self.addEventListener("fetch", (event) => {
+    event.respondWith(fetch(event.request))
 })
