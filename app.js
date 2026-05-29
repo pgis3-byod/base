@@ -154,3 +154,12 @@ window.Home = async function () {
   document.getElementById("games").innerHTML =
     doc.getElementById("games").innerHTML;
 };
+
+window.Home = async function () {
+  
+    document.getElementById("games").innerHTML = 
+      '
+      test
+      ';
+};
+
