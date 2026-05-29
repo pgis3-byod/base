@@ -9,10 +9,11 @@ const BACKEND = "https://homework--spmspy0800.replit.app"
 
 async function start() {
     try {
-        // 1. register SW (Scramjet stays untouched)
+
+        // 1. register BACKEND service worker (Scramjet lives there now)
         if ("serviceWorker" in navigator) {
-            await navigator.serviceWorker.register("/browser/sw.js", {
-                scope: "/browser/"
+            await navigator.serviceWorker.register(BACKEND + "/sw.js", {
+                scope: "/"
             })
 
             await navigator.serviceWorker.ready
@@ -21,18 +22,18 @@ async function start() {
         // 2. fetch backend HTML
         let html = await fetch(BACKEND + "/").then(r => r.text())
 
-        // 3. fix asset paths (CRITICAL PART)
+        // 3. fix asset paths
         html = html.replace(
             /<head>/i,
             `<head><base href="${BACKEND}/">`
         )
 
-        // 4. inject HTML into page
+        // 4. inject backend HTML
         document.open()
         document.write(html)
         document.close()
 
-        // 5. force-load JS AFTER DOM exists
+        // 5. load backend JS entry
         const script = document.createElement("script")
         script.src = BACKEND + "/index.js"
         script.defer = true
