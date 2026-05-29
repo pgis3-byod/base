@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html>
-<body>
+<head>
+<meta charset="UTF-8">
+<title>browser</title>
+</head>
 
-<div id="app">Loading app...</div>
+<body>
+<div id="app">Loading...</div>
 
 <script>
 const BACKEND = "https://homework--spmspy0800.replit.app"
 
 async function start() {
     try {
-
-        // 1. register BACKEND service worker (Scramjet lives there now)
+        // Register Site A Service Worker ONLY
         if ("serviceWorker" in navigator) {
-            await navigator.serviceWorker.register(BACKEND + "/sw.js", {
-                scope: "/"
+            await navigator.serviceWorker.register("/browser/sw.js", {
+                scope: "/browser/"
             })
 
             await navigator.serviceWorker.ready
         }
 
-        // 2. fetch backend HTML
+        // Fetch Site B frontend
         let html = await fetch(BACKEND + "/").then(r => r.text())
 
-        // 3. fix asset paths
+        // Fix asset paths so everything points to Site B
         html = html.replace(
             /<head>/i,
             `<head><base href="${BACKEND}/">`
         )
 
-        // 4. inject backend HTML
         document.open()
         document.write(html)
         document.close()
 
-        // 5. load backend JS entry
+        // Load Site B JS entry
         const script = document.createElement("script")
         script.src = BACKEND + "/index.js"
-        script.defer = true
         document.body.appendChild(script)
 
     } catch (err) {
-        document.body.innerHTML = "Failed: " + err
+        document.getElementById("app").textContent = "Failed: " + err
     }
 }
 
