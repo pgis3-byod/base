@@ -29,7 +29,7 @@ html, body {
 <div id="app">Loading...</div>
 
 <script>
-    console.log("page JS running")
+    alert("page JS running")
 
 navigator.serviceWorker.register("/browser/sw.js")
     .then(() => console.log("SW registered"))
