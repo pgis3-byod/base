@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
-<body>
+<head>
+<meta charset="UTF-8">
+<title>Browser</title>
+</head>
 
+<body>
 <div id="app">Loading...</div>
 
 <script>
@@ -10,33 +14,37 @@ const BACKEND = "https://homework--spmspy0800.replit.app"
 async function start() {
     try {
 
-        // IMPORTANT: register Site A SW ONLY
-        await navigator.serviceWorker.register("/browser/sw.js", {
-            scope: "/browser/"
-        })
+        // ✔ MUST be Site A SW ONLY
+        if ("serviceWorker" in navigator) {
+            await navigator.serviceWorker.register("/browser/sw.js", {
+                scope: "/browser/"
+            })
 
-        await navigator.serviceWorker.ready
+            await navigator.serviceWorker.ready
+        }
 
-        // fetch Site B HTML
-        let html = await fetch(BACKEND + "/").then(r => r.text())
+        // Fetch Site B frontend HTML
+        const res = await fetch(BACKEND + "/")
+        let html = await res.text()
 
-        // fix asset paths
+        // Fix asset paths so everything resolves to Site B
         html = html.replace(
             /<head>/i,
             `<head><base href="${BACKEND}/">`
         )
 
+        // Replace current document with fetched frontend
         document.open()
         document.write(html)
         document.close()
 
-        // load Site B JS
+        // Load Site B main JS explicitly
         const script = document.createElement("script")
         script.src = BACKEND + "/index.js"
         document.body.appendChild(script)
 
     } catch (err) {
-        document.body.innerHTML = "Error: " + err
+        document.body.innerHTML = "Failed to load app: " + err
     }
 }
 
