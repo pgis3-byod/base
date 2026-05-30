@@ -393,3 +393,53 @@ document.addEventListener("click", (e) => {
 
   window.open(url);
 });
+
+
+
+
+
+
+
+
+const THEME_KEY = "theme-mode";
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    document.body.classList.remove("light");
+  } else {
+    document.body.classList.add("light");
+    document.body.classList.remove("dark");
+  }
+
+  const btn = document.getElementById("themeToggle");
+  if (btn) btn.textContent = theme === "dark" ? "Switch to Light" : "Switch to Dark";
+}
+
+function getSavedTheme() {
+  return localStorage.getItem(THEME_KEY) || "light";
+}
+
+function toggleTheme() {
+  const current = getSavedTheme();
+  const next = current === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#themeToggle");
+  if (!btn) return;
+  toggleTheme();
+});
+
+const observer = new MutationObserver(() => {
+  const saved = getSavedTheme();
+  applyTheme(saved);
+});
+
+observer.observe(document.documentElement, { childList: true, subtree: true });
+
+applyTheme(getSavedTheme());
