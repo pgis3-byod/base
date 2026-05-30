@@ -182,7 +182,7 @@ window.settings = async function () {
     <hr>
 
     <h2>URL cloak</h2>
-    <button id="aboutBlankBtn">Open site in about:blank</button> <button>Open site in blob:</button>
+    <button id="aboutBlankBtn">Open site in about:blank</button> <button id="blobBtn">Open site in blob:</button>
           `;
   
   updateToggleButton();
@@ -196,6 +196,13 @@ window.test = async function () {
       <p>this is an example page in pgis 3</p>
     `;
 };
+
+
+
+
+
+
+
 
 
 
@@ -348,4 +355,38 @@ document.addEventListener("click", (e) => {
 
   win.document.body.style.margin = "0";
   win.document.body.appendChild(iframe);
+});
+
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#blobBtn");
+  if (!btn) return;
+
+  const html = `
+    <!doctype html>
+    <html>
+      <head>
+        <style>
+          html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+          }
+          iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="${location.href}"></iframe>
+      </body>
+    </html>
+  `;
+
+  const blob = new Blob([html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+
+  window.open(url);
 });
