@@ -172,10 +172,10 @@ window.settings = async function () {
  <h2>Tab cloak</h2>
 
     <button id="toggleButton"></button>
-
+<br>
     <p style="display: inline-block;">Title: </p>
     <input id="cloakTitleInput" type="text" placeholder="Google Classroom">
-
+<br>
     <p style="display: inline-block;">Favicon URL: </p>
     <input id="cloakIconInput" type="text" placeholder="https://...">
 
