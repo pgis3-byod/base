@@ -8,24 +8,29 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+
+
+:root {
+  --bg: white;
+  --text: black;
+}
+
+[data-theme="dark"] {
+  --bg: #111;
+  --text: white;
+}
+
+
+
   
 html, body {
 scroll-behavior: smooth;
 text-align:center;
-background-color:black;
-color:whitesmoke;
+background: var(--bg);
+color: var(--text);
 }
   
-body.light {
-  background-color: white;
-  color: black;
-}
 
-body.dark {
-  background-color: black;
-  color: whitesmoke;
-}
-  
 .games{
 background-color:rgba(0,0,0,0.1);
 display:flex;
