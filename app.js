@@ -173,6 +173,8 @@ window.settings = async function () {
   <button id="toggleButton"></button>
   <hr>
           `;
+    updateToggleButton();
+
 };
 
 
