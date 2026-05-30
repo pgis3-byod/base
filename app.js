@@ -189,13 +189,13 @@ window.test = async function () {
 
 
 document.addEventListener("change", (e) => {
-  if (e.target && e.target.id === "urlInput") {
+  if (e.target && e.target.id === "panicUrl") {
     saveUrl(e.target.value);
   }
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.target && e.target.id === "urlInput" && e.key === "Enter") {
+  if (e.target && e.target.id === "panicUrl" && e.key === "Enter") {
     saveUrl(e.target.value);
   }
 
