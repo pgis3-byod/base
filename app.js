@@ -188,24 +188,31 @@ window.test = async function () {
 
 
 
-const input = document.getElementById("panicUrl");
-
-function getUrl() {
-  return localStorage.getItem("redirectUrl") || "https://google.com";
-}
-
-input.addEventListener("change", () => {
-  let url = input.value.trim();
-  if (!url) return;
-  if (!url.startsWith("http://") && !url.startsWith("https://")) {
-    url = "https://" + url;
+document.addEventListener("change", (e) => {
+  if (e.target && e.target.id === "urlInput") {
+    saveUrl(e.target.value);
   }
-  localStorage.setItem("redirectUrl", url);
 });
 
 document.addEventListener("keydown", (e) => {
+  if (e.target && e.target.id === "urlInput" && e.key === "Enter") {
+    saveUrl(e.target.value);
+  }
+
   if (e.ctrlKey && e.key.toLowerCase() === "q") {
     e.preventDefault();
-    window.location.href = getUrl();
+    window.location.href =
+      localStorage.getItem("redirectUrl") || "https://google.com";
   }
 });
+
+function saveUrl(value) {
+  let url = value.trim();
+  if (!url) return;
+
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = "https://" + url;
+  }
+
+  localStorage.setItem("redirectUrl", url);
+}
