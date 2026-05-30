@@ -173,10 +173,10 @@ window.settings = async function () {
 
     <button id="toggleButton"></button>
 
-    <p>Cloak title</p>
+    <p style="display: inline-block;">Title: </p>
     <input id="cloakTitleInput" type="text" placeholder="Google Classroom">
 
-    <p>Cloak favicon URL</p>
+    <p style="display: inline-block;">Favicon URL: </p>
     <input id="cloakIconInput" type="text" placeholder="https://...">
 
     <hr>
@@ -269,7 +269,7 @@ function applyCloak() {
 
   const icon =
     localStorage.getItem(CLOAK_ICON_KEY) ||
-    "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&url=https://classroom.google.com&size=16";
+    "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://staticin.pages.dev/settings&size=16";
 
   if (enabled) {
     document.title = title;
