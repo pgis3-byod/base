@@ -400,22 +400,25 @@ document.addEventListener("click", (e) => {
 
 
 
-
 const KEY = "theme";
 
 function apply(theme) {
-  document.body.className = theme;
+  document.documentElement.setAttribute("data-theme", theme);
 
   const btn = document.getElementById("themeToggle");
-  if (btn) btn.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  if (btn) {
+    btn.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  }
 }
 
 function getTheme() {
-  return localStorage.getItem(KEY) || "light";
+  return localStorage.getItem(KEY) || "dark";
 }
 
 function toggle() {
-  const next = getTheme() === "dark" ? "light" : "dark";
+  const current = getTheme();
+  const next = current === "dark" ? "light" : "dark";
+
   localStorage.setItem(KEY, next);
   apply(next);
 }
