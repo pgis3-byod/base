@@ -215,4 +215,5 @@ function saveUrl(value) {
   }
 
   localStorage.setItem("redirectUrl", url);
+  alert("saved");
 }
