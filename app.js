@@ -169,6 +169,9 @@ window.settings = async function () {
   <p style="display: inline-block;">Panic key url:</p> 
 <input id="panicUrl" type="text" placeholder="google.com">
   <hr>
+  <h2>Tab cloak</h2>
+  <button id="toggleButton"></button>
+  <hr>
           `;
 };
 
@@ -215,5 +218,59 @@ function saveUrl(value) {
   }
 
   localStorage.setItem("redirectUrl", url);
-  alert("saved");
+  alert("Saved");
 }
+
+
+
+
+
+
+
+
+
+
+const TOGGLE_KEY = "buttonEnabled";
+
+if (localStorage.getItem(TOGGLE_KEY) === null) {
+  localStorage.setItem(TOGGLE_KEY, "false");
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "toggleButton") {
+    const current = localStorage.getItem(TOGGLE_KEY) === "true";
+    const newState = !current;
+
+    localStorage.setItem(TOGGLE_KEY, newState);
+
+    e.target.textContent = newState ? "ON" : "OFF";
+  }
+});
+
+function updateToggleButton() {
+  const button = document.getElementById("toggleButton");
+  if (!button) return;
+
+  const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
+  button.textContent = enabled ? "ON" : "OFF";
+}
+
+const observer = new MutationObserver(updateToggleButton);
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+updateToggleButton();
+
+
+
+
+
+
+
+
+
+
+
+
