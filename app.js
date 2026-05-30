@@ -183,6 +183,9 @@ window.settings = async function () {
 
     <h2>URL cloak</h2>
     <button id="aboutBlankBtn">Open site in about:blank</button> <button id="blobBtn">Open site in blob:</button>
+    <hr>
+    <h2>Theme</h2>
+    <button>Light Mode</button> <button>particles on/off</button>
           `;
   
   updateToggleButton();
