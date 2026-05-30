@@ -161,6 +161,11 @@ window.proxy = async function () {
     `;
 };
 
+window.settings = async function () {
+    document.getElementById("games").innerHTML = `
+      <h1>settings</h1>
+          `;
+};
 
 
 window.test = async function () {
