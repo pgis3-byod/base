@@ -173,7 +173,8 @@ window.settings = async function () {
   <button id="toggleButton"></button>
   <hr>
           `;
-    updateToggleButton();
+  
+  updateToggleButton();
 
 };
 
@@ -232,17 +233,64 @@ function saveUrl(value) {
 
 
 
+const TOGGLE_KEY = "buttonEnabled";
+
+function setFavicon(url) {
+  let link = document.querySelector("link[rel~='icon']");
+
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+
+  link.href = url;
+}
+
+const originalTitle = document.title;
+const originalFavicon =
+  document.querySelector("link[rel~='icon']")?.href || "";
+
+function applyCloak() {
+  const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
+
+  if (enabled) {
+    document.title = "Google Classroom";
+
+    setFavicon(
+      "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://classroom.google.com&size=16"
+    );
+  } else {
+    document.title = originalTitle;
+    setFavicon(originalFavicon);
+  }
+
+  updateToggleButton();
+}
+
 function updateToggleButton() {
   const button = document.getElementById("toggleButton");
   if (!button) return;
 
   const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
-  const text = enabled ? "ON" : "OFF";
-
-  if (button.textContent !== text) {
-    button.textContent = text;
-  }
+  button.textContent = enabled ? "ON" : "OFF";
 }
+
+document.addEventListener("click", (e) => {
+  if (e.target?.id !== "toggleButton") return;
+
+  const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
+
+  localStorage.setItem(TOGGLE_KEY, (!enabled).toString());
+
+  applyCloak();
+});
+
+if (localStorage.getItem(TOGGLE_KEY) === null) {
+  localStorage.setItem(TOGGLE_KEY, "false");
+}
+
+applyCloak();
 
 
 
