@@ -185,7 +185,7 @@ window.settings = async function () {
     <button id="aboutBlankBtn">Open site in about:blank</button> <button id="blobBtn">Open site in blob:</button>
     <hr>
     <h2>Theme</h2>
-    <button>Light Mode</button> <button>particles on/off</button>
+    <button id="themeToggle">Light Mode</button> <button>particles on/off</button>
           `;
   
   updateToggleButton();
@@ -401,45 +401,29 @@ document.addEventListener("click", (e) => {
 
 
 
-const THEME_KEY = "theme-mode";
+const KEY = "theme";
 
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-
-  if (theme === "dark") {
-    document.body.classList.add("dark");
-    document.body.classList.remove("light");
-  } else {
-    document.body.classList.add("light");
-    document.body.classList.remove("dark");
-  }
+function apply(theme) {
+  document.body.className = theme;
 
   const btn = document.getElementById("themeToggle");
-  if (btn) btn.textContent = theme === "dark" ? "Switch to Light" : "Switch to Dark";
+  if (btn) btn.textContent = theme === "dark" ? "Light mode" : "Dark mode";
 }
 
-function getSavedTheme() {
-  return localStorage.getItem(THEME_KEY) || "light";
+function getTheme() {
+  return localStorage.getItem(KEY) || "light";
 }
 
-function toggleTheme() {
-  const current = getSavedTheme();
-  const next = current === "dark" ? "light" : "dark";
-  localStorage.setItem(THEME_KEY, next);
-  applyTheme(next);
+function toggle() {
+  const next = getTheme() === "dark" ? "light" : "dark";
+  localStorage.setItem(KEY, next);
+  apply(next);
 }
 
 document.addEventListener("click", (e) => {
-  const btn = e.target.closest("#themeToggle");
-  if (!btn) return;
-  toggleTheme();
+  if (e.target && e.target.id === "themeToggle") {
+    toggle();
+  }
 });
 
-const observer = new MutationObserver(() => {
-  const saved = getSavedTheme();
-  applyTheme(saved);
-});
-
-observer.observe(document.documentElement, { childList: true, subtree: true });
-
-applyTheme(getSavedTheme());
+apply(getTheme());
