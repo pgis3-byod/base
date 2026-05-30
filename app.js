@@ -163,13 +163,49 @@ window.proxy = async function () {
 
 window.settings = async function () {
     document.getElementById("games").innerHTML = `
-      <h1>settings</h1>
+       <h2>Panic key</h2>
+  <h3>The panic key is <b>ctrl + q</b></h3>
+  
+  <p style="display: inline-block;">Panic key url:</p> 
+<input id="panicUrl" type="text" placeholder="google.com">
+  <hr>
           `;
 };
 
 
 window.test = async function () {
     document.getElementById("games").innerHTML = `
-      test
+      <h1 class="main-text">test</h1>
+      <p>this is an example page in pgis 3</p>
     `;
 };
+
+
+
+
+
+
+
+
+
+const input = document.getElementById("panicUrl");
+
+function getUrl() {
+  return localStorage.getItem("redirectUrl") || "https://google.com";
+}
+
+input.addEventListener("change", () => {
+  let url = input.value.trim();
+  if (!url) return;
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = "https://" + url;
+  }
+  localStorage.setItem("redirectUrl", url);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === "q") {
+    e.preventDefault();
+    window.location.href = getUrl();
+  }
+});
