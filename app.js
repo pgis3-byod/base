@@ -169,9 +169,17 @@ window.settings = async function () {
   <p style="display: inline-block;">Panic key url:</p> 
 <input id="panicUrl" type="text" placeholder="google.com">
   <hr>
-  <h2>Tab cloak</h2>
-  <button id="toggleButton"></button>
-  <hr>
+ <h2>Tab cloak</h2>
+
+    <button id="toggleButton"></button>
+
+    <p>Cloak title</p>
+    <input id="cloakTitleInput" type="text" placeholder="Google Classroom">
+
+    <p>Cloak favicon URL</p>
+    <input id="cloakIconInput" type="text" placeholder="https://...">
+
+    <hr>
           `;
   
   updateToggleButton();
@@ -234,6 +242,12 @@ function saveUrl(value) {
 
 
 const TOGGLE_KEY = "buttonEnabled";
+const CLOAK_TITLE_KEY = "cloakTitle";
+const CLOAK_ICON_KEY = "cloakIcon";
+
+const originalTitle = document.title;
+const originalFavicon =
+  document.querySelector("link[rel~='icon']")?.href || "";
 
 function setFavicon(url) {
   let link = document.querySelector("link[rel~='icon']");
@@ -247,19 +261,19 @@ function setFavicon(url) {
   link.href = url;
 }
 
-const originalTitle = document.title;
-const originalFavicon =
-  document.querySelector("link[rel~='icon']")?.href || "";
-
 function applyCloak() {
   const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
 
-  if (enabled) {
-    document.title = "Google Classroom";
+  const title =
+    localStorage.getItem(CLOAK_TITLE_KEY) || "Google Classroom";
 
-    setFavicon(
-      "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://staticin.pages.dev/settings&size=16"
-    );
+  const icon =
+    localStorage.getItem(CLOAK_ICON_KEY) ||
+    "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&url=https://classroom.google.com&size=16";
+
+  if (enabled) {
+    document.title = title;
+    setFavicon(icon);
   } else {
     document.title = originalTitle;
     setFavicon(originalFavicon);
@@ -277,13 +291,23 @@ function updateToggleButton() {
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target?.id !== "toggleButton") return;
+  if (e.target?.id === "toggleButton") {
+    const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
+    localStorage.setItem(TOGGLE_KEY, (!enabled).toString());
+    applyCloak();
+  }
+});
 
-  const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
+document.addEventListener("input", (e) => {
+  if (e.target?.id === "cloakTitleInput") {
+    localStorage.setItem(CLOAK_TITLE_KEY, e.target.value);
+    applyCloak();
+  }
 
-  localStorage.setItem(TOGGLE_KEY, (!enabled).toString());
-
-  applyCloak();
+  if (e.target?.id === "cloakIconInput") {
+    localStorage.setItem(CLOAK_ICON_KEY, e.target.value);
+    applyCloak();
+  }
 });
 
 if (localStorage.getItem(TOGGLE_KEY) === null) {
