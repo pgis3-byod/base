@@ -258,7 +258,7 @@ function applyCloak() {
     document.title = "Google Classroom";
 
     setFavicon(
-      "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://classroom.google.com&size=16"
+      "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://staticin.pages.dev/settings&size=16"
     );
   } else {
     document.title = originalTitle;
