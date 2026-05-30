@@ -230,38 +230,17 @@ function saveUrl(value) {
 
 
 
-const TOGGLE_KEY = "buttonEnabled";
-
-if (localStorage.getItem(TOGGLE_KEY) === null) {
-  localStorage.setItem(TOGGLE_KEY, "false");
-}
-
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "toggleButton") {
-    const current = localStorage.getItem(TOGGLE_KEY) === "true";
-    const newState = !current;
-
-    localStorage.setItem(TOGGLE_KEY, newState);
-
-    e.target.textContent = newState ? "ON" : "OFF";
-  }
-});
-
 function updateToggleButton() {
   const button = document.getElementById("toggleButton");
   if (!button) return;
 
   const enabled = localStorage.getItem(TOGGLE_KEY) === "true";
-  button.textContent = enabled ? "ON" : "OFF";
+  const text = enabled ? "ON" : "OFF";
+
+  if (button.textContent !== text) {
+    button.textContent = text;
+  }
 }
-
-const observer = new MutationObserver(updateToggleButton);
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
-
-updateToggleButton();
 
 
 
