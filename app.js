@@ -180,6 +180,9 @@ window.settings = async function () {
     <input id="cloakIconInput" type="text" placeholder="https://...">
 
     <hr>
+
+    <h2>URL cloak</h2>
+    <button id="aboutBlankBtn">Open site in about:blank</button> <button>Open site in blob:</button>
           `;
   
   updateToggleButton();
@@ -327,3 +330,19 @@ applyCloak();
 
 
 
+
+
+
+
+document.getElementById("aboutBlankBtn").addEventListener("click", () => {
+  const win = window.open("about:blank");
+
+  const iframe = win.document.createElement("iframe");
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  iframe.src = window.location.href;
+
+  win.document.body.style.margin = "0";
+  win.document.body.appendChild(iframe);
+});
