@@ -334,7 +334,10 @@ applyCloak();
 
 
 
-document.getElementById("aboutBlankBtn").addEventListener("click", () => {
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#aboutBlankBtn");
+  if (!btn) return;
+
   const win = window.open("about:blank");
 
   const iframe = win.document.createElement("iframe");
