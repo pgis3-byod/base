@@ -158,11 +158,20 @@ window.loadGames = async function () {
 
 
 window.Home = async function () {
+
+
+
+
+  
   const html = await fetch("/index.html").then(r => r.text());
   const doc = new DOMParser().parseFromString(html, "text/html");
 
   document.getElementById("games").innerHTML =
     doc.getElementById("games").innerHTML;
+
+
+  document.getElementById("cards2").innerHTML =
+    doc.getElementById("cards2").innerHTML;
 };
 
 window.proxy = async function () {
