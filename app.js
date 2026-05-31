@@ -514,34 +514,52 @@ updateParticles();
 
 const STORAGE_KEY = "iframeUrl";
 
-function setIframeUrl(url) {
+function applyUrl(url) {
   const iframe = document.getElementById("browser");
-  if (!iframe || !url) return;
-
-  iframe.src = url;
-  localStorage.setItem(STORAGE_KEY, url);
+  if (iframe && url) {
+    iframe.src = url;
+  }
 }
 
-document.addEventListener("keydown", (e) => {
-  if (e.key !== "Enter") return;
+function saveUrl(url) {
+  localStorage.setItem(STORAGE_KEY, url);
+  applyUrl(url);
+}
 
+function tryBindInput() {
   const input = document.getElementById("browserUrl");
-  if (!input || e.target !== input) return;
+  if (!input || input.dataset.bound === "true") return;
 
-  setIframeUrl(input.value.trim());
-  alert("browser URl changed");
-});
+  input.dataset.bound = "true";
 
+  input.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    const url = input.value.trim();
+    if (!url) return;
+
+    saveUrl(url);
+  });
+}
+
+function tryBindIframe() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+
+  applyUrl(saved);
+}
+
+// Observe DOM for dynamic injection
 const observer = new MutationObserver(() => {
-  const iframe = document.getElementById("browser");
-  const savedUrl = localStorage.getItem(STORAGE_KEY);
-
-  if (iframe && savedUrl && iframe.src !== savedUrl) {
-    iframe.src = savedUrl;
-  }
+  tryBindInput();
+  tryBindIframe();
 });
 
 observer.observe(document.documentElement, {
   childList: true,
   subtree: true
 });
+
+// Run once in case elements already exist
+tryBindInput();
+tryBindIframe();
