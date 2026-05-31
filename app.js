@@ -138,6 +138,8 @@ window.loadGames = async function () {
     document.body.appendChild(container);
   }
 
+  if (!container) return;
+
   container.innerHTML = games.map(game => `
     <div class="gamediv">
       <b>${game}</b>
