@@ -1,4 +1,4 @@
-const gamesEl = document.getElementById("cards2");
+const gamesEl = document.getElementById("games");
 
 let games = [];
 
@@ -130,13 +130,15 @@ if (currentGame) {
 window.loadGames = async function () {
   const games = await getGames();
 
+  let container = document.getElementById("cards2");
 
-  
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "cards2";
+    document.body.appendChild(container);
+  }
 
-
-
-  
-  gamesEl.innerHTML = games.map(game => `
+  container.innerHTML = games.map(game => `
     <div class="gamediv">
       <b>${game}</b>
       <img
@@ -144,21 +146,12 @@ window.loadGames = async function () {
         alt="game image"
         width="100"
         height="100">
-      <a href="?lesson=${game}">
+      <a href="?lesson=${encodeURIComponent(game)}">
         <button>play</button>
       </a>
     </div>
   `).join("");
-
-
-
-  
-   
-
-
-  
 };
-
 
 
 window.Home = async function () {
