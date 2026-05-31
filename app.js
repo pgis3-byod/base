@@ -455,7 +455,7 @@ function updateParticles() {
 
   const particles = document.getElementById("particles-js");
   if (particles) {
-    particles.style.display = enabled ? "block" : "none";
+    particles.style.display = enabled ? "" : "none";
   }
 
   const button = document.getElementById("particlesToggle");
@@ -465,11 +465,13 @@ function updateParticles() {
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target.closest("#particlesToggle")) {
-    const enabled = localStorage.getItem(PARTICLES_KEY) !== "false";
-    localStorage.setItem(PARTICLES_KEY, !enabled);
-    updateParticles();
-  }
+  const button = e.target.closest("#particlesToggle");
+  if (!button) return;
+
+  const enabled = localStorage.getItem(PARTICLES_KEY) !== "false";
+  localStorage.setItem(PARTICLES_KEY, String(!enabled));
+
+  updateParticles();
 });
 
 if (localStorage.getItem(PARTICLES_KEY) === null) {
@@ -477,8 +479,3 @@ if (localStorage.getItem(PARTICLES_KEY) === null) {
 }
 
 updateParticles();
-
-new MutationObserver(updateParticles).observe(document.body, {
-  childList: true,
-  subtree: true
-});
