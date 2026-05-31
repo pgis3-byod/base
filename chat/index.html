@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Chat V3</title>
+<title>Chat V4</title>
 
 <style>
 body {
@@ -59,7 +59,7 @@ input, button {
 <!-- LOGIN -->
 <div id="login">
   <input id="name" placeholder="username">
-  <button onclick="login()">Join</button>
+  <button onclick="login()">Login</button>
 </div>
 
 <!-- APP -->
@@ -67,7 +67,8 @@ input, button {
 
   <div id="sidebar">
     <button onclick="openGlobal()">🌍 Global Chat</button>
-    <button onclick="joinRoomPrompt()">+ Join Room</button>
+    <button onclick="createRoom()">+ Create Room</button>
+    <button onclick="joinRoomPrompt()">🔗 Join Room</button>
 
     <hr>
 
@@ -116,23 +117,25 @@ const auth = getAuth(app);
 let user = null;
 let username = "";
 let currentRoom = "global";
+let joinedRooms = new Map();
 
 /* ---------------- LOGIN PERSISTENCE ---------------- */
 username = localStorage.getItem("username");
 
-if (username) {
-  document.getElementById("login")?.classList.add("hidden");
-  document.getElementById("app")?.classList.remove("hidden");
-}
-
 /* ---------------- AUTH ---------------- */
 signInAnonymously(auth).then(u => {
   user = u.user;
-  if (username) openGlobal();
+
+  if (username) {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    openGlobal();
+  }
 });
 
 /* ---------------- LOGIN ---------------- */
-window.login = async function () {
+window.login = function () {
   username = document.getElementById("name").value.trim();
   if (!username) return;
 
@@ -150,6 +153,30 @@ window.openGlobal = function () {
   listenMessages();
 };
 
+/* ---------------- CREATE ROOM ---------------- */
+window.createRoom = async function () {
+
+  const name = prompt("Room name:");
+  if (!name) return;
+
+  const invite = Math.random().toString(36).slice(2, 8);
+
+  const roomRef = await addDoc(collection(db, "rooms"), {
+    name,
+    inviteCode: invite,
+    ownerId: user.uid
+  });
+
+  await setDoc(doc(db, "rooms", roomRef.id, "members", user.uid), {
+    role: "owner",
+    joinedAt: Date.now()
+  });
+
+  addRoomToUI(roomRef.id, name);
+
+  alert("Invite code: " + invite);
+};
+
 /* ---------------- JOIN ROOM ---------------- */
 window.joinRoomPrompt = async function () {
 
@@ -165,7 +192,7 @@ window.joinRoomPrompt = async function () {
   const room = snap.data();
 
   if (room.inviteCode !== code) {
-    alert("Wrong code");
+    alert("Wrong invite code");
     return;
   }
 
@@ -174,14 +201,18 @@ window.joinRoomPrompt = async function () {
     joinedAt: Date.now()
   });
 
-  addMyRoom(roomId, room.name);
+  addRoomToUI(roomId, room.name);
 
   currentRoom = roomId;
   listenMessages();
 };
 
-/* ---------------- MY ROOMS (LOCAL ONLY) ---------------- */
-function addMyRoom(id, name) {
+/* ---------------- ROOM UI ---------------- */
+function addRoomToUI(id, name) {
+  if (joinedRooms.has(id)) return;
+
+  joinedRooms.set(id, true);
+
   const el = document.createElement("div");
   el.innerHTML = `<button onclick="switchRoom('${id}')">${name}</button>`;
   document.getElementById("myRooms").appendChild(el);
@@ -208,7 +239,6 @@ function listenMessages() {
 
       const el = document.createElement("div");
       el.className = "msg";
-
       el.textContent = `${d.username}: ${d.text}`;
 
       box.appendChild(el);
@@ -217,7 +247,7 @@ function listenMessages() {
   }, err => console.error(err));
 }
 
-/* ---------------- SEND ---------------- */
+/* ---------------- SEND MESSAGE ---------------- */
 window.sendMessage = async function () {
   const text = document.getElementById("msg").value;
   if (!text.trim()) return;
