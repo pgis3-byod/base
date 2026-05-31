@@ -143,6 +143,16 @@ window.loadGames = async function () {
       </a>
     </div>
   `).join("");
+
+
+
+  
+   document.getElementById("games").innerHTML = `
+      
+    `;
+
+
+  
 };
 
 
