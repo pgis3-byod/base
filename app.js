@@ -586,43 +586,51 @@ applySavedBrowserUrl();
 
 
 
+const ERUDA_BUTTON_KEY = "eruda_button_visible";
 
-const ERUDA_KEY = "eruda_enabled";
+function setErudaButtonVisible(visible) {
+  const erudaEntryBtn = document.querySelector(".eruda-entry-btn");
 
-function setErudaState(enabled) {
-  if (enabled) {
-    if (!window.eruda._isInit) eruda.init();
-    eruda.show();
-  } else {
-    eruda.hide();
+  if (erudaEntryBtn) {
+    erudaEntryBtn.style.display = visible ? "" : "none";
   }
-  localStorage.setItem(ERUDA_KEY, enabled ? "true" : "false");
-  updateErudaButton();
+
+  localStorage.setItem(ERUDA_BUTTON_KEY, visible ? "true" : "false");
+  updateErudaButtonToggle();
 }
 
-function toggleEruda() {
-  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
-  setErudaState(!enabled);
+function toggleErudaButton() {
+  const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
+  setErudaButtonVisible(!visible);
 }
 
-function updateErudaButton() {
-  const btn = document.getElementById("erudaToggle");
+function updateErudaButtonToggle() {
+  const btn = document.getElementById("erudaButtonToggle");
   if (!btn) return;
 
-  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
-  btn.textContent = enabled ? "ON" : "OFF";
-  btn.classList.toggle("active", enabled);
+  const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
+  btn.textContent = visible ? "Enabled" : "Disabled";
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "erudaToggle") {
-    toggleEruda();
+  if (e.target?.id === "erudaButtonToggle") {
+    toggleErudaButton();
   }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
-  setErudaState(enabled);
+  const applyState = () => {
+    const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
+    setErudaButtonVisible(visible);
+  };
+
+  applyState();
+
+  const observer = new MutationObserver(applyState);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 });
 
 
