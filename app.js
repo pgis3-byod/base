@@ -209,6 +209,11 @@ window.settings = async function () {
   <button id="erudaButtonToggle">Eruda Button Toggle</button>
 </div>
 
+  <div class="settings">
+  <h2>JavaScript runner</h2>
+  <textarea id="jsCode" placeholder="Enter JavaScript here"></textarea>
+<button id="runJsButton">Run JavaScript</button>
+</div>
   
   </div>
 </details>
@@ -630,3 +635,33 @@ document.addEventListener("DOMContentLoaded", applyErudaButtonState);
 
 
 
+document.addEventListener("click", (e) => {
+  if (e.target?.id !== "runJsButton") return;
+
+  const textarea = document.getElementById("jsCode");
+
+  if (!textarea) {
+    alert("Textarea not found.");
+    return;
+  }
+
+  const code = textarea.value;
+
+  if (!code.trim()) {
+    alert("Please enter some JavaScript.");
+    return;
+  }
+
+  if (!confirm(
+    "Warning: Running JavaScript can break the page or cause unexpected behavior.\n\nDo you want to continue?"
+  )) {
+    return;
+  }
+
+  try {
+    new Function(code)();
+  } catch (err) {
+    alert("Error:\n" + err);
+    console.error(err);
+  }
+});
