@@ -194,10 +194,11 @@ window.settings = async function () {
     <h2>Theme</h2>
     <button id="themeToggle">Light Mode (beta)</button> <button id="particlesToggle">Particles</button>
     </div>
+    </div>
 <br><br>
 <details>
   <summary>Advanced</summary>
-
+    <div class="card">
   <div class="settings">
   <h2>browser</h2>
   <p style="display: inline-block;">Browser URL</p>
@@ -528,6 +529,7 @@ document.addEventListener("keydown", (e) => {
   if (!input || e.target !== input) return;
 
   setIframeUrl(input.value.trim());
+  alert("browser URl changed");
 });
 
 const observer = new MutationObserver(() => {
