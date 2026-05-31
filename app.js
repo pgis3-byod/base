@@ -163,12 +163,16 @@ window.proxy = async function () {
 
 window.settings = async function () {
     document.getElementById("games").innerHTML = `
-       <h2>Panic key</h2>
+       <div class="card">
+  <div class="settings">
+    <h2>Panic key</h2>
   <h3>The panic key is <b>ctrl + q</b></h3>
   
   <p style="display: inline-block;">Panic key url:</p> 
 <input id="panicUrl" type="text" placeholder="google.com">
-  <hr>
+  </div>
+    <div class="settings">
+
  <h2>Tab cloak</h2>
 
     <button id="toggleButton"></button>
@@ -179,13 +183,17 @@ window.settings = async function () {
     <p style="display: inline-block;">Favicon URL: </p>
     <input id="cloakIconInput" type="text" placeholder="https://...">
 
-    <hr>
+    </div>
+    <div class="settings">
 
     <h2>URL cloak</h2>
     <button id="aboutBlankBtn">Open site in about:blank</button> <button id="blobBtn">Open site in blob:</button>
-    <hr>
+    </div>
+        <div class="settings">
+
     <h2>Theme</h2>
     <button id="themeToggle">Light Mode</button> <button>particles on/off</button>
+    </div>
           `;
   
   updateToggleButton();
