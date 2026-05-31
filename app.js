@@ -192,7 +192,7 @@ window.settings = async function () {
         <div class="settings">
 
     <h2>Theme</h2>
-    <button id="themeToggle">Light Mode</button> <button particlesToggle>particles</button>
+    <button id="themeToggle">Light Mode</button> <button id="particlesToggle">particles</button>
     </div>
           `;
   
