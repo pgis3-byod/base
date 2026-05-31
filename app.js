@@ -196,7 +196,7 @@ window.settings = async function () {
     </div>
 
 <details>
-  <summary>advanced</summary>
+  <summary>Advanced</summary>
 
   <div class="settings">
   <h2>browser</h2>
