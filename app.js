@@ -206,7 +206,7 @@ window.settings = async function () {
   </div>
   <div class="settings">
   <h2>eruda dev tools</h2>
-  <button id="erudaToggle">OFF</button>
+  <button id="erudaButtonToggle">loading...</button>
 </div>
 
   
