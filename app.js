@@ -194,13 +194,14 @@ window.settings = async function () {
     <h2>Theme</h2>
     <button id="themeToggle">Light Mode (beta)</button> <button id="particlesToggle">Particles</button>
     </div>
-
+<br><br>
 <details>
   <summary>Advanced</summary>
 
   <div class="settings">
   <h2>browser</h2>
-  <input id="browserUrl">
+  <p style="display: inline-block;">Browser URL</p>
+  <input placeholder="https://croxyproxy.com" id="browserUrl">
   </div>
 </details>
 
