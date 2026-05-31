@@ -204,6 +204,13 @@ window.settings = async function () {
   <p style="display: inline-block;">embedd URL (must start with http(s)://)</p>
   <input placeholder="https://croxyproxy.com" id="browserUrl">
   </div>
+  <div class="settings">
+  <h2>eruda dev tools</h2>
+  <button id="erudaToggle">OFF</button>
+</div>
+
+  
+  </div>
 </details>
 
 
@@ -559,3 +566,74 @@ observer.observe(document.documentElement, {
 
 bindBrowserUrlInput();
 applySavedBrowserUrl();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const ERUDA_KEY = "eruda_enabled";
+
+function setErudaState(enabled) {
+  if (enabled) {
+    if (!window.eruda._isInit) eruda.init();
+    eruda.show();
+  } else {
+    eruda.hide();
+  }
+  localStorage.setItem(ERUDA_KEY, enabled ? "true" : "false");
+  updateErudaButton();
+}
+
+function toggleEruda() {
+  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
+  setErudaState(!enabled);
+}
+
+function updateErudaButton() {
+  const btn = document.getElementById("erudaToggle");
+  if (!btn) return;
+
+  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
+  btn.textContent = enabled ? "ON" : "OFF";
+  btn.classList.toggle("active", enabled);
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "erudaToggle") {
+    toggleEruda();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const enabled = localStorage.getItem(ERUDA_KEY) === "true";
+  setErudaState(enabled);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
