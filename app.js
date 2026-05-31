@@ -450,74 +450,35 @@ apply(getTheme());
 
 const PARTICLES_KEY = "particlesEnabled";
 
-function setParticlesEnabled(enabled) {
-  localStorage.setItem(PARTICLES_KEY, enabled);
+function updateParticles() {
+  const enabled = localStorage.getItem(PARTICLES_KEY) !== "false";
 
-  if (enabled) {
-    if (typeof particlesJS === "function") {
-      particlesJS("particles-js", {
-        particles: {
-          number: { value: 80 },
-          color: { value: "#ffffff" },
-          shape: { type: "circle" },
-          opacity: { value: 0.5 },
-          size: { value: 3 },
-          line_linked: {
-            enable: true,
-            distance: 150,
-            color: "#ffffff",
-            opacity: 0.4,
-            width: 1
-          },
-          move: {
-            enable: true,
-            speed: 2
-          }
-        }
-      });
-    }
-  } else {
-    const container = document.getElementById("particles-js");
-    if (container) {
-      container.innerHTML = "";
-    }
-
-    if (window.pJSDom) {
-      window.pJSDom.forEach(p => p.pJS.fn.vendors.destroypJS());
-      window.pJSDom = [];
-    }
+  const particles = document.getElementById("particles-js");
+  if (particles) {
+    particles.style.display = enabled ? "block" : "none";
   }
 
-  updateParticlesButton();
-}
-
-function updateParticlesButton() {
   const button = document.getElementById("particlesToggle");
-  if (!button) return;
-
-  const enabled = localStorage.getItem(PARTICLES_KEY) === "true";
-  button.textContent = enabled ? "Particles: ON" : "Particles: OFF";
+  if (button) {
+    button.textContent = enabled ? "Particles: ON" : "Particles: OFF";
+  }
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "particlesToggle") {
-    const enabled = localStorage.getItem(PARTICLES_KEY) === "true";
-    setParticlesEnabled(!enabled);
+  if (e.target.closest("#particlesToggle")) {
+    const enabled = localStorage.getItem(PARTICLES_KEY) !== "false";
+    localStorage.setItem(PARTICLES_KEY, !enabled);
+    updateParticles();
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem(PARTICLES_KEY) === null) {
-    localStorage.setItem(PARTICLES_KEY, "true");
-  }
+if (localStorage.getItem(PARTICLES_KEY) === null) {
+  localStorage.setItem(PARTICLES_KEY, "true");
+}
 
-  setParticlesEnabled(
-    localStorage.getItem(PARTICLES_KEY) === "true"
-  );
-});
+updateParticles();
 
-const observer = new MutationObserver(updateParticlesButton);
-observer.observe(document.body, {
+new MutationObserver(updateParticles).observe(document.body, {
   childList: true,
   subtree: true
 });
