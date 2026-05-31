@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PGIS Chat</title>
+<title>Private Firebase Chat</title>
 
 <style>
 body {
@@ -89,7 +89,8 @@ import {
   orderBy,
   doc,
   setDoc,
-  deleteDoc
+  deleteDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
@@ -175,8 +176,26 @@ function loadRooms() {
   });
 }
 
-/* ---------------- JOIN ROOM ---------------- */
+/* ---------------- INVITE PROTECTED JOIN ---------------- */
 window.joinRoom = async function (roomId) {
+
+  const code = prompt("Enter invite code:");
+  if (!code) return;
+
+  const roomSnap = await getDoc(doc(db, "rooms", roomId));
+
+  if (!roomSnap.exists()) {
+    alert("Room not found");
+    return;
+  }
+
+  const room = roomSnap.data();
+
+  if (room.inviteCode !== code) {
+    alert("Wrong invite code");
+    return;
+  }
+
   currentRoom = roomId;
 
   await setDoc(
