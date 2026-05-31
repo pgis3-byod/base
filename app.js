@@ -130,6 +130,12 @@ if (currentGame) {
 window.loadGames = async function () {
   const games = await getGames();
 
+
+  
+
+
+
+  
   gamesEl.innerHTML = games.map(game => `
     <div class="gamediv">
       <b>${game}</b>
@@ -147,9 +153,7 @@ window.loadGames = async function () {
 
 
   
-   document.getElementById("games").innerHTML = `
-      
-    `;
+   
 
 
   
@@ -170,8 +174,7 @@ window.Home = async function () {
     doc.getElementById("games").innerHTML;
 
 
-  document.getElementById("cards2").innerHTML =
-    doc.getElementById("cards2").innerHTML;
+ 
 };
 
 window.proxy = async function () {
