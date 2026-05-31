@@ -1,4 +1,4 @@
-const gamesEl = document.getElementById("games");
+const gamesEl = document.getElementById("cards2");
 
 let games = [];
 
