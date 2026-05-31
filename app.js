@@ -130,28 +130,22 @@ if (currentGame) {
 window.loadGames = async function () {
   const games = await getGames();
 
-  let container = document.getElementById("cards2");
-
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "cards2";
-document.getElementById("games").appendChild(container);  }
-
+  const container = document.getElementById("games");
   if (!container) return;
 
-  container.innerHTML = games.map(game => `
-    <div class="gamediv">
-      <b>${game}</b>
-      <img
-        src="games/${game}.png"
-        alt="game image"
-        width="100"
-        height="100">
-      <a href="?lesson=${encodeURIComponent(game)}">
-        <button>play</button>
-      </a>
+  container.innerHTML = `
+    <div id="cards2">
+      ${games.map(game => `
+        <div class="gamediv">
+          <b>${game}</b>
+          <img src="games/${game}.png" width="100" height="100">
+          <a href="?lesson=${encodeURIComponent(game)}">
+            <button>play</button>
+          </a>
+        </div>
+      `).join("")}
     </div>
-  `).join("");
+  `;
 };
 
 
