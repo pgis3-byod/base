@@ -135,8 +135,7 @@ window.loadGames = async function () {
   if (!container) {
     container = document.createElement("div");
     container.id = "cards2";
-    document.body.appendChild(container);
-  }
+document.getElementById("games").appendChild(container);  }
 
   if (!container) return;
 
