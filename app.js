@@ -514,19 +514,19 @@ updateParticles();
 
 const STORAGE_KEY = "iframeUrl";
 
-function applyUrl(url) {
+function applyBrowserUrl(url) {
   const iframe = document.getElementById("browser");
   if (iframe && url) {
     iframe.src = url;
   }
 }
 
-function saveUrl(url) {
+function saveBrowserUrl(url) {
   localStorage.setItem(STORAGE_KEY, url);
-  applyUrl(url);
+  applyBrowserUrl(url);
 }
 
-function tryBindInput() {
+function bindBrowserUrlInput() {
   const input = document.getElementById("browserUrl");
   if (!input || input.dataset.bound === "true") return;
 
@@ -538,21 +538,18 @@ function tryBindInput() {
     const url = input.value.trim();
     if (!url) return;
 
-    saveUrl(url);
+    saveBrowserUrl(url);
   });
 }
 
-function tryBindIframe() {
+function applySavedBrowserUrl() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return;
-
-  applyUrl(saved);
+  if (saved) applyBrowserUrl(saved);
 }
 
-// Observe DOM for dynamic injection
 const observer = new MutationObserver(() => {
-  tryBindInput();
-  tryBindIframe();
+  bindBrowserUrlInput();
+  applySavedBrowserUrl();
 });
 
 observer.observe(document.documentElement, {
@@ -560,6 +557,5 @@ observer.observe(document.documentElement, {
   subtree: true
 });
 
-// Run once in case elements already exist
-tryBindInput();
-tryBindIframe();
+bindBrowserUrlInput();
+applySavedBrowserUrl();
