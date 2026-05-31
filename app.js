@@ -19,7 +19,7 @@ if (currentGame) {
 
     if (!games.includes(currentGame)) {
       document.body.innerHTML = "Game not found";
-      throw new Error("Game not found");
+      throw new Error("Lesson not found");
     }
 
     document.body.innerHTML = `
@@ -175,7 +175,7 @@ window.settings = async function () {
 
  <h2>Tab cloak</h2>
 
-    <button id="toggleButton"></button>
+    <button id="toggleButton">ON/OFF</button>
 <br>
     <p style="display: inline-block;">Title: </p>
     <input id="cloakTitleInput" type="text" placeholder="Google Classroom">
@@ -192,7 +192,7 @@ window.settings = async function () {
         <div class="settings">
 
     <h2>Theme</h2>
-    <button id="themeToggle">Light Mode</button> <button>particles on/off</button>
+    <button id="themeToggle">Light Mode</button> <button particlesToggle>particles</button>
     </div>
           `;
   
@@ -217,7 +217,7 @@ window.test = async function () {
 
 
 
-
+//settings//
 
 
 
@@ -438,3 +438,86 @@ document.addEventListener("click", (e) => {
 });
 
 apply(getTheme());
+
+
+
+
+
+
+
+
+
+
+const PARTICLES_KEY = "particlesEnabled";
+
+function setParticlesEnabled(enabled) {
+  localStorage.setItem(PARTICLES_KEY, enabled);
+
+  if (enabled) {
+    if (typeof particlesJS === "function") {
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80 },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5 },
+          size: { value: 3 },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 2
+          }
+        }
+      });
+    }
+  } else {
+    const container = document.getElementById("particles-js");
+    if (container) {
+      container.innerHTML = "";
+    }
+
+    if (window.pJSDom) {
+      window.pJSDom.forEach(p => p.pJS.fn.vendors.destroypJS());
+      window.pJSDom = [];
+    }
+  }
+
+  updateParticlesButton();
+}
+
+function updateParticlesButton() {
+  const button = document.getElementById("particlesToggle");
+  if (!button) return;
+
+  const enabled = localStorage.getItem(PARTICLES_KEY) === "true";
+  button.textContent = enabled ? "Particles: ON" : "Particles: OFF";
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "particlesToggle") {
+    const enabled = localStorage.getItem(PARTICLES_KEY) === "true";
+    setParticlesEnabled(!enabled);
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem(PARTICLES_KEY) === null) {
+    localStorage.setItem(PARTICLES_KEY, "true");
+  }
+
+  setParticlesEnabled(
+    localStorage.getItem(PARTICLES_KEY) === "true"
+  );
+});
+
+const observer = new MutationObserver(updateParticlesButton);
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
