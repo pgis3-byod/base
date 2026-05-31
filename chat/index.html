@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Firebase Chat V2</title>
+<title>Firebase Chat Fixed</title>
 
 <style>
 body {
@@ -56,13 +56,11 @@ input, button {
 
 <body>
 
-<!-- LOGIN -->
 <div id="login">
   <input id="name" placeholder="username">
   <button onclick="login()">Join</button>
 </div>
 
-<!-- APP -->
 <div id="app" class="hidden">
 
   <div id="rooms">
@@ -97,11 +95,11 @@ import {
   signInAnonymously
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ---------------- FIREBASE CONFIG ---------------- */
+/* ---------------- CONFIG ---------------- */
 const firebaseConfig = {
-  apiKey: "AIzaSyAENHNbcpimSnAzIbwDXUtqBik3Vw5cFVU",
-  authDomain: "pgis-3-chat.firebaseapp.com",
-  projectId: "pgis-3-chat"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -114,12 +112,12 @@ let username = "";
 let currentRoom = null;
 
 /* ---------------- AUTH ---------------- */
-await signInAnonymously(auth).then(u => {
+signInAnonymously(auth).then(u => {
   user = u.user;
 });
 
 /* ---------------- LOGIN ---------------- */
-window.login = async () => {
+window.login = async function () {
   username = document.getElementById("name").value.trim();
   if (!username) return;
 
@@ -130,7 +128,7 @@ window.login = async () => {
 };
 
 /* ---------------- CREATE ROOM ---------------- */
-window.createRoom = async () => {
+window.createRoom = async function () {
   const name = prompt("Room name");
   if (!name) return;
 
@@ -143,6 +141,105 @@ window.createRoom = async () => {
     locked: false
   });
 
-  // CRITICAL: owner membership
   await setDoc(
-    doc(db, "rooms", roomRef.id, "members",
+    doc(db, "rooms", roomRef.id, "members", user.uid),
+    {
+      role: "owner",
+      banned: false
+    }
+  );
+};
+
+/* ---------------- LOAD ROOMS ---------------- */
+function loadRooms() {
+  onSnapshot(collection(db, "rooms"), snap => {
+    const list = document.getElementById("roomList");
+    list.innerHTML = "";
+
+    snap.forEach(r => {
+      const d = r.data();
+
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <b>${d.name}</b><br>
+        <small>${d.inviteCode}</small><br>
+        <button onclick="joinRoom('${r.id}')">Join</button>
+      `;
+
+      list.appendChild(div);
+    });
+  });
+}
+
+/* ---------------- JOIN ROOM ---------------- */
+window.joinRoom = async function (roomId) {
+  currentRoom = roomId;
+
+  await setDoc(
+    doc(db, "rooms", roomId, "members", user.uid),
+    {
+      role: "user",
+      banned: false
+    },
+    { merge: true }
+  );
+
+  listenMessages();
+};
+
+/* ---------------- MESSAGES ---------------- */
+function listenMessages() {
+  const q = query(
+    collection(db, "rooms", currentRoom, "messages"),
+    orderBy("createdAt")
+  );
+
+  onSnapshot(q, snap => {
+    const box = document.getElementById("messages");
+    box.innerHTML = "";
+
+    snap.forEach(m => {
+      const d = m.data();
+
+      const el = document.createElement("div");
+      el.className = "msg";
+
+      el.innerHTML = `
+        <b>${d.username}</b>: ${d.text}
+        <br>
+        <button onclick="deleteMsg('${m.id}')">delete</button>
+      `;
+
+      box.appendChild(el);
+    });
+  });
+}
+
+/* ---------------- SEND MESSAGE ---------------- */
+window.sendMessage = async function () {
+  const text = document.getElementById("msg").value;
+  if (!text.trim() || !currentRoom) return;
+
+  await addDoc(
+    collection(db, "rooms", currentRoom, "messages"),
+    {
+      text,
+      username,
+      userId: user.uid,
+      createdAt: Date.now()
+    }
+  );
+
+  document.getElementById("msg").value = "";
+};
+
+/* ---------------- DELETE MESSAGE ---------------- */
+window.deleteMsg = async function (id) {
+  await deleteDoc(
+    doc(db, "rooms", currentRoom, "messages", id)
+  );
+};
+</script>
+
+</body>
+</html>
