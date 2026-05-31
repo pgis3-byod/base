@@ -201,7 +201,7 @@ window.settings = async function () {
     <div class="card">
   <div class="settings">
   <h2>browser</h2>
-  <p style="display: inline-block;">Browser URL</p>
+  <p style="display: inline-block;">embedd URL (must start with http(s)://)</p>
   <input placeholder="https://croxyproxy.com" id="browserUrl">
   </div>
 </details>
