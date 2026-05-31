@@ -588,28 +588,26 @@ applySavedBrowserUrl();
 
 const ERUDA_BUTTON_KEY = "eruda_button_visible";
 
-function setErudaButtonVisible(visible) {
-  const erudaEntryBtn = document.querySelector(".eruda-entry-btn");
+function applyErudaButtonState() {
+  const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
 
+  const erudaEntryBtn = document.querySelector(".eruda-entry-btn");
   if (erudaEntryBtn) {
     erudaEntryBtn.style.display = visible ? "" : "none";
   }
 
-  localStorage.setItem(ERUDA_BUTTON_KEY, visible ? "true" : "false");
-  updateErudaButtonToggle();
+  const toggleBtn = document.getElementById("erudaButtonToggle");
+  if (toggleBtn) {
+    toggleBtn.textContent = visible
+      ? "Eruda Button ON"
+      : "Eruda Button OFF";
+  }
 }
 
 function toggleErudaButton() {
   const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
-  setErudaButtonVisible(!visible);
-}
-
-function updateErudaButtonToggle() {
-  const btn = document.getElementById("erudaButtonToggle");
-  if (!btn) return;
-
-  const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
-  btn.textContent = visible ? "Enabled" : "Disabled";
+  localStorage.setItem(ERUDA_BUTTON_KEY, (!visible).toString());
+  applyErudaButtonState();
 }
 
 document.addEventListener("click", (e) => {
@@ -619,14 +617,14 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const applyState = () => {
-    const visible = localStorage.getItem(ERUDA_BUTTON_KEY) === "true";
-    setErudaButtonVisible(visible);
-  };
+  applyErudaButtonState();
 
-  applyState();
+  const observer = new MutationObserver(() => {
+    if (document.querySelector(".eruda-entry-btn")) {
+      applyErudaButtonState();
+    }
+  });
 
-  const observer = new MutationObserver(applyState);
   observer.observe(document.body, {
     childList: true,
     subtree: true
