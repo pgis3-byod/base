@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Private Firebase Chat</title>
+<title>Secure Chat V2</title>
 
 <style>
 body {
@@ -98,7 +98,7 @@ import {
   signInAnonymously
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ---------------- FIREBASE CONFIG ---------------- */
+/* ---------------- FIREBASE ---------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyAENHNbcpimSnAzIbwDXUtqBik3Vw5cFVU",
   authDomain: "pgis-3-chat.firebaseapp.com",
@@ -148,7 +148,8 @@ window.createRoom = async function () {
     doc(db, "rooms", roomRef.id, "members", user.uid),
     {
       role: "owner",
-      banned: false
+      banned: false,
+      joinedAt: Date.now()
     }
   );
 };
@@ -171,23 +172,17 @@ function loadRooms() {
 
       list.appendChild(div);
     });
-  }, err => {
-    console.error(err);
-  });
+  }, err => console.error(err));
 }
 
-/* ---------------- INVITE PROTECTED JOIN ---------------- */
+/* ---------------- JOIN ROOM (SECURE V2) ---------------- */
 window.joinRoom = async function (roomId) {
 
   const code = prompt("Enter invite code:");
   if (!code) return;
 
   const roomSnap = await getDoc(doc(db, "rooms", roomId));
-
-  if (!roomSnap.exists()) {
-    alert("Room not found");
-    return;
-  }
+  if (!roomSnap.exists()) return;
 
   const room = roomSnap.data();
 
@@ -202,7 +197,8 @@ window.joinRoom = async function (roomId) {
     doc(db, "rooms", roomId, "members", user.uid),
     {
       role: "user",
-      banned: false
+      banned: false,
+      joinedAt: Date.now()
     },
     { merge: true }
   );
@@ -229,15 +225,12 @@ function listenMessages() {
 
       el.innerHTML = `
         <b>${d.username}</b>: ${d.text}
-        <br>
-        <button onclick="deleteMsg('${m.id}')">delete</button>
       `;
 
       box.appendChild(el);
     });
-  }, err => {
-    console.error(err);
-  });
+
+  }, err => console.error(err));
 }
 
 /* ---------------- SEND MESSAGE ---------------- */
@@ -258,11 +251,9 @@ window.sendMessage = async function () {
   document.getElementById("msg").value = "";
 };
 
-/* ---------------- DELETE MESSAGE ---------------- */
+/* ---------------- DELETE MESSAGE (owner only via rules) ---------------- */
 window.deleteMsg = async function (id) {
-  await deleteDoc(
-    doc(db, "rooms", currentRoom, "messages", id)
-  );
+  await deleteDoc(doc(db, "rooms", currentRoom, "messages", id));
 };
 </script>
 
