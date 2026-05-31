@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Secure Chat V2</title>
+<title>Chat V3</title>
 
 <style>
 body {
@@ -17,7 +17,7 @@ body {
   height: 100vh;
 }
 
-#rooms {
+#sidebar {
   width: 260px;
   background: #1c1c1c;
   padding: 10px;
@@ -65,9 +65,13 @@ input, button {
 <!-- APP -->
 <div id="app" class="hidden">
 
-  <div id="rooms">
-    <button onclick="createRoom()">+ Create Room</button>
-    <div id="roomList"></div>
+  <div id="sidebar">
+    <button onclick="openGlobal()">🌍 Global Chat</button>
+    <button onclick="joinRoomPrompt()">+ Join Room</button>
+
+    <hr>
+
+    <div id="myRooms"></div>
   </div>
 
   <div id="chat">
@@ -89,7 +93,6 @@ import {
   orderBy,
   doc,
   setDoc,
-  deleteDoc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -98,7 +101,7 @@ import {
   signInAnonymously
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ---------------- FIREBASE ---------------- */
+/* ---------------- CONFIG ---------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyAENHNbcpimSnAzIbwDXUtqBik3Vw5cFVU",
   authDomain: "pgis-3-chat.firebaseapp.com",
@@ -112,11 +115,20 @@ const auth = getAuth(app);
 /* ---------------- STATE ---------------- */
 let user = null;
 let username = "";
-let currentRoom = null;
+let currentRoom = "global";
+
+/* ---------------- LOGIN PERSISTENCE ---------------- */
+username = localStorage.getItem("username");
+
+if (username) {
+  document.getElementById("login")?.classList.add("hidden");
+  document.getElementById("app")?.classList.remove("hidden");
+}
 
 /* ---------------- AUTH ---------------- */
 signInAnonymously(auth).then(u => {
   user = u.user;
+  if (username) openGlobal();
 });
 
 /* ---------------- LOGIN ---------------- */
@@ -124,85 +136,59 @@ window.login = async function () {
   username = document.getElementById("name").value.trim();
   if (!username) return;
 
+  localStorage.setItem("username", username);
+
   document.getElementById("login").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
 
-  loadRooms();
+  openGlobal();
 };
 
-/* ---------------- CREATE ROOM ---------------- */
-window.createRoom = async function () {
-  const name = prompt("Room name");
-  if (!name) return;
-
-  const invite = Math.random().toString(36).slice(2, 8);
-
-  const roomRef = await addDoc(collection(db, "rooms"), {
-    name,
-    ownerId: user.uid,
-    inviteCode: invite,
-    locked: false
-  });
-
-  await setDoc(
-    doc(db, "rooms", roomRef.id, "members", user.uid),
-    {
-      role: "owner",
-      banned: false,
-      joinedAt: Date.now()
-    }
-  );
+/* ---------------- GLOBAL CHAT ---------------- */
+window.openGlobal = function () {
+  currentRoom = "global";
+  listenMessages();
 };
 
-/* ---------------- LOAD ROOMS ---------------- */
-function loadRooms() {
-  onSnapshot(collection(db, "rooms"), snap => {
-    const list = document.getElementById("roomList");
-    list.innerHTML = "";
+/* ---------------- JOIN ROOM ---------------- */
+window.joinRoomPrompt = async function () {
 
-    snap.forEach(r => {
-      const d = r.data();
+  const roomId = prompt("Room ID:");
+  if (!roomId) return;
 
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <b>${d.name}</b><br>
-        <small>${d.inviteCode}</small><br>
-        <button onclick="joinRoom('${r.id}')">Join</button>
-      `;
-
-      list.appendChild(div);
-    });
-  }, err => console.error(err));
-}
-
-/* ---------------- JOIN ROOM (SECURE V2) ---------------- */
-window.joinRoom = async function (roomId) {
-
-  const code = prompt("Enter invite code:");
+  const code = prompt("Invite code:");
   if (!code) return;
 
-  const roomSnap = await getDoc(doc(db, "rooms", roomId));
-  if (!roomSnap.exists()) return;
+  const snap = await getDoc(doc(db, "rooms", roomId));
+  if (!snap.exists()) return;
 
-  const room = roomSnap.data();
+  const room = snap.data();
 
   if (room.inviteCode !== code) {
-    alert("Wrong invite code");
+    alert("Wrong code");
     return;
   }
 
+  await setDoc(doc(db, "rooms", roomId, "members", user.uid), {
+    role: "user",
+    joinedAt: Date.now()
+  });
+
+  addMyRoom(roomId, room.name);
+
   currentRoom = roomId;
+  listenMessages();
+};
 
-  await setDoc(
-    doc(db, "rooms", roomId, "members", user.uid),
-    {
-      role: "user",
-      banned: false,
-      joinedAt: Date.now()
-    },
-    { merge: true }
-  );
+/* ---------------- MY ROOMS (LOCAL ONLY) ---------------- */
+function addMyRoom(id, name) {
+  const el = document.createElement("div");
+  el.innerHTML = `<button onclick="switchRoom('${id}')">${name}</button>`;
+  document.getElementById("myRooms").appendChild(el);
+}
 
+window.switchRoom = function (roomId) {
+  currentRoom = roomId;
   listenMessages();
 };
 
@@ -223,9 +209,7 @@ function listenMessages() {
       const el = document.createElement("div");
       el.className = "msg";
 
-      el.innerHTML = `
-        <b>${d.username}</b>: ${d.text}
-      `;
+      el.textContent = `${d.username}: ${d.text}`;
 
       box.appendChild(el);
     });
@@ -233,10 +217,10 @@ function listenMessages() {
   }, err => console.error(err));
 }
 
-/* ---------------- SEND MESSAGE ---------------- */
+/* ---------------- SEND ---------------- */
 window.sendMessage = async function () {
   const text = document.getElementById("msg").value;
-  if (!text.trim() || !currentRoom) return;
+  if (!text.trim()) return;
 
   await addDoc(
     collection(db, "rooms", currentRoom, "messages"),
@@ -249,11 +233,6 @@ window.sendMessage = async function () {
   );
 
   document.getElementById("msg").value = "";
-};
-
-/* ---------------- DELETE MESSAGE (owner only via rules) ---------------- */
-window.deleteMsg = async function (id) {
-  await deleteDoc(doc(db, "rooms", currentRoom, "messages", id));
 };
 </script>
 
