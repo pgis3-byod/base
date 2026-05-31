@@ -157,7 +157,7 @@ window.Home = async function () {
 
 window.proxy = async function () {
     document.getElementById("games").innerHTML = `
-      <iframe style="width: 100%; height: 100vh;" src="https://homework--spmspy0800.replit.app"></iframe>
+      <iframe id="browser" style="width: 100%; height: 100vh;" src="https://homework--spmspy0800.replit.app"></iframe>
     `;
 };
 
@@ -193,6 +193,18 @@ window.settings = async function () {
 
     <h2>Theme</h2>
     <button id="themeToggle">Light Mode (beta)</button> <button id="particlesToggle">Particles</button>
+    </div>
+
+<details>
+  <summary>advanced</summary>
+
+  <div class="settings">
+  <h2>browser</h2>
+  <input id="browserUrl">
+  </div>
+</details>
+
+
     </div>
           `;
   
@@ -479,3 +491,54 @@ if (localStorage.getItem(PARTICLES_KEY) === null) {
 }
 
 updateParticles();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const STORAGE_KEY = "iframeUrl";
+
+function setIframeUrl(url) {
+  const iframe = document.getElementById("browser");
+  if (!iframe || !url) return;
+
+  iframe.src = url;
+  localStorage.setItem(STORAGE_KEY, url);
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+
+  const input = document.getElementById("browserUrl");
+  if (!input || e.target !== input) return;
+
+  setIframeUrl(input.value.trim());
+});
+
+const observer = new MutationObserver(() => {
+  const iframe = document.getElementById("browser");
+  const savedUrl = localStorage.getItem(STORAGE_KEY);
+
+  if (iframe && savedUrl && iframe.src !== savedUrl) {
+    iframe.src = savedUrl;
+  }
+});
+
+observer.observe(document.documentElement, {
+  childList: true,
+  subtree: true
+});
