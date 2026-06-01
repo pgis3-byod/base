@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Chat V4</title>
+<title>Chat V1</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
   background: #111;
-  color: #fff;
+  color: white;
 }
 
 #app {
@@ -58,7 +58,10 @@ input, button {
 
 <!-- LOGIN -->
 <div id="login">
-  <input id="name" placeholder="username">
+  <input id="email" placeholder="email">
+  <input id="password" type="password" placeholder="password">
+  <input id="username" placeholder="username">
+  <button onclick="register()">Register</button>
   <button onclick="login()">Login</button>
 </div>
 
@@ -66,13 +69,13 @@ input, button {
 <div id="app" class="hidden">
 
   <div id="sidebar">
-    <button onclick="openGlobal()">🌍 Global Chat</button>
+    <button onclick="openGlobal()">🌍 Global</button>
     <button onclick="createRoom()">+ Create Room</button>
-    <button onclick="joinRoomPrompt()">🔗 Join Room</button>
+    <button onclick="joinRoom()">🔗 Join Room</button>
 
     <hr>
 
-    <div id="myRooms"></div>
+    <div id="roomList"></div>
   </div>
 
   <div id="chat">
@@ -99,12 +102,13 @@ import {
 
 import {
   getAuth,
-  signInAnonymously
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ---------------- CONFIG ---------------- */
 const firebaseConfig = {
-  apiKey: "AIzaSyAENHNbcpimSnAzIbwDXUtqBik3Vw5cFVU",
+  apiKey: "YOUR_API_KEY",
   authDomain: "pgis-3-chat.firebaseapp.com",
   projectId: "pgis-3-chat"
 };
@@ -113,117 +117,132 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* ---------------- STATE ---------------- */
 let user = null;
 let username = "";
 let currentRoom = "global";
-let joinedRooms = new Map();
-
-/* ---------------- LOGIN PERSISTENCE ---------------- */
-username = localStorage.getItem("username");
 
 /* ---------------- AUTH ---------------- */
-signInAnonymously(auth).then(u => {
-  user = u.user;
 
-  if (username) {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
+window.register = async function () {
+  const email = emailEl().value;
+  const password = passEl().value;
+  const name = userEl().value.trim().toLowerCase();
 
-    openGlobal();
+  if (!email || !password || !name) return;
+
+  const taken = await getDoc(doc(db, "usernames", name));
+  if (taken.exists()) {
+    alert("Username taken");
+    return;
   }
-});
 
-/* ---------------- LOGIN ---------------- */
-window.login = function () {
-  username = document.getElementById("name").value.trim();
-  if (!username) return;
+  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  user = cred.user;
 
-  localStorage.setItem("username", username);
+  await setDoc(doc(db, "users", user.uid), {
+    username: name,
+    email
+  });
+
+  await setDoc(doc(db, "usernames", name), {
+    uid: user.uid
+  });
+
+  afterLogin(name);
+};
+
+window.login = async function () {
+  const email = emailEl().value;
+  const password = passEl().value;
+
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+  user = cred.user;
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  username = snap.data().username;
+
+  afterLogin(username);
+};
+
+function afterLogin(name) {
+  username = name;
+  localStorage.setItem("username", name);
 
   document.getElementById("login").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
 
   openGlobal();
-};
+}
 
 /* ---------------- GLOBAL CHAT ---------------- */
+
 window.openGlobal = function () {
   currentRoom = "global";
   listenMessages();
 };
 
 /* ---------------- CREATE ROOM ---------------- */
-window.createRoom = async function () {
 
-  const name = prompt("Room name:");
+window.createRoom = async function () {
+  const name = prompt("Room name");
   if (!name) return;
 
-  const invite = Math.random().toString(36).slice(2, 8);
+  const invite = generateCode();
 
-  const roomRef = await addDoc(collection(db, "rooms"), {
+  const ref = await addDoc(collection(db, "rooms"), {
     name,
-    inviteCode: invite,
-    ownerId: user.uid
+    ownerId: user.uid,
+    inviteCode: invite
   });
 
-  await setDoc(doc(db, "rooms", roomRef.id, "members", user.uid), {
-    role: "owner",
-    joinedAt: Date.now()
+  await setDoc(doc(db, "rooms", ref.id, "members", user.uid), {
+    role: "owner"
   });
 
-  addRoomToUI(roomRef.id, name);
-
+  addRoom(ref.id, name);
   alert("Invite code: " + invite);
 };
 
 /* ---------------- JOIN ROOM ---------------- */
-window.joinRoomPrompt = async function () {
 
-  const roomId = prompt("Room ID:");
-  if (!roomId) return;
-
-  const code = prompt("Invite code:");
+window.joinRoom = async function () {
+  const code = prompt("Invite code");
   if (!code) return;
 
-  const snap = await getDoc(doc(db, "rooms", roomId));
-  if (!snap.exists()) return;
+  const allRoomsSnap = await getDocs(collection(db, "rooms"));
 
-  const room = snap.data();
+  let found = null;
 
-  if (room.inviteCode !== code) {
-    alert("Wrong invite code");
-    return;
-  }
-
-  await setDoc(doc(db, "rooms", roomId, "members", user.uid), {
-    role: "user",
-    joinedAt: Date.now()
+  allRoomsSnap.forEach(r => {
+    if (r.data().inviteCode === code) {
+      found = { id: r.id, data: r.data() };
+    }
   });
 
-  addRoomToUI(roomId, room.name);
+  if (!found) return alert("Invalid code");
 
-  currentRoom = roomId;
-  listenMessages();
+  await setDoc(doc(db, "rooms", found.id, "members", user.uid), {
+    role: "user"
+  });
+
+  addRoom(found.id, found.data.name);
 };
 
-/* ---------------- ROOM UI ---------------- */
-function addRoomToUI(id, name) {
-  if (joinedRooms.has(id)) return;
+/* ---------------- ROOMS UI ---------------- */
 
-  joinedRooms.set(id, true);
-
-  const el = document.createElement("div");
-  el.innerHTML = `<button onclick="switchRoom('${id}')">${name}</button>`;
-  document.getElementById("myRooms").appendChild(el);
+function addRoom(id, name) {
+  const div = document.createElement("div");
+  div.innerHTML = `<button onclick="switchRoom('${id}')">${name}</button>`;
+  document.getElementById("roomList").appendChild(div);
 }
 
-window.switchRoom = function (roomId) {
-  currentRoom = roomId;
+window.switchRoom = function (id) {
+  currentRoom = id;
   listenMessages();
 };
 
 /* ---------------- MESSAGES ---------------- */
+
 function listenMessages() {
   const q = query(
     collection(db, "rooms", currentRoom, "messages"),
@@ -236,21 +255,17 @@ function listenMessages() {
 
     snap.forEach(m => {
       const d = m.data();
-
       const el = document.createElement("div");
       el.className = "msg";
       el.textContent = `${d.username}: ${d.text}`;
-
       box.appendChild(el);
     });
-
-  }, err => console.error(err));
+  });
 }
 
-/* ---------------- SEND MESSAGE ---------------- */
 window.sendMessage = async function () {
   const text = document.getElementById("msg").value;
-  if (!text.trim()) return;
+  if (!text) return;
 
   await addDoc(
     collection(db, "rooms", currentRoom, "messages"),
@@ -264,6 +279,34 @@ window.sendMessage = async function () {
 
   document.getElementById("msg").value = "";
 };
+
+/* ---------------- HELPERS ---------------- */
+
+function generateCode(len = 6) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "";
+  for (let i = 0; i < len; i++) {
+    out += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return out;
+}
+
+function emailEl() { return document.getElementById("email"); }
+function passEl() { return document.getElementById("password"); }
+function userEl() { return document.getElementById("username"); }
+
+/* ---------------- AUTH STATE ---------------- */
+
+onAuthStateChanged(auth, async (u) => {
+  if (!u) return;
+  user = u;
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (snap.exists()) {
+    username = snap.data().username;
+    afterLogin(username);
+  }
+});
 </script>
 
 </body>
