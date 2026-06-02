@@ -23,6 +23,117 @@ if (currentGame) {
     }
 
     document.body.innerHTML = `
+<!--widgets-->
+  
+<div id="batteryWidget">
+  <svg viewBox="0 0 24 24" class="battery-icon">
+    <rect x="2" y="7" width="18" height="10" rx="2" ry="2"
+      fill="none" stroke="currentColor" stroke-width="2"/>
+    <rect id="batteryLevel" x="2.5" y="7" width="0" height="10"
+      fill="currentColor"/>
+    <rect x="20" y="10" width="2" height="4"
+      fill="currentColor"/>
+  </svg>
+
+  <span id="batteryText">--%</span>
+</div>
+
+<style>
+
+
+#batteryWidget {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+  font-family: sans-serif;
+  font-size: 14px;
+  z-index: 9999;
+}
+
+.battery-icon {
+  width: 24px;
+  height: 24px;
+}
+</style>
+
+<script>
+async function initBattery() {
+  if (!navigator.getBattery) {
+    document.getElementById("batteryText").textContent = "N/A";
+    return;
+  }
+
+  const battery = await navigator.getBattery();
+
+  function update() {
+    const level = Math.round(battery.level * 100);
+
+    document.getElementById("batteryText").textContent = level + "%";
+
+    const fill = document.getElementById("batteryLevel");
+    fill.setAttribute("width", (level / 100) * 16);
+  }
+
+  update();
+
+  battery.addEventListener("levelchange", update);
+  battery.addEventListener("chargingchange", update);
+}
+
+initBattery();
+</script>
+  
+<div id="fps-counter">FPS: N/A</div>
+
+<style>
+#fps-counter{
+    position: fixed;
+  top: 35px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+  font-family: sans-serif;
+  font-size: 14px;
+  z-index: 9999;
+}
+</style>
+
+<script>
+(() => {
+    const fpsCounter = document.getElementById("fps-counter");
+
+    let frames = 0;
+    let lastTime = performance.now();
+
+    function loop(now) {
+        frames++;
+
+        if (now >= lastTime + 1000) {
+            const fps = Math.round((frames * 1000) / (now - lastTime));
+            fpsCounter.textContent = `FPS: ${fps}`;
+            frames = 0;
+            lastTime = now;
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+})();
+</script>
+
+
+  
+<!--main content-->
+  
+
+    
     <div style="text-align: left; margin: 0; padding: 20px; background: black; color: whitesmoke; font-family: Arial;">
       <a href="/" style="color: white;">← Back to Homepage</a>
       <a href="games/${currentGame}.html" download style="margin-left: 12px;">Download game</a>
