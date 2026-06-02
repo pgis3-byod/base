@@ -8,6 +8,6 @@ PGIS 3 is the third version of pgis, this version has a password to gatekeep the
 
 ## Version
 
-pgis 3 ALPHA
+**pgis 3 ALPHA**
 
 (pgis version format: V.3.6.A.⁰)
