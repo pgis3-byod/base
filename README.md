@@ -3,7 +3,7 @@ PGIS 3 is the third version of pgis, this version has a password to gatekeep the
 
 ## links
 [https://pgis3.vercel.app](https://pgis3.vercel.app)
-[https://pgis3.appwrite.io](https://pgis3.appwrite.io)
+[https://test-v3.appwrite.network](test-v3.appwrite.network)
 
 ## Version
 
