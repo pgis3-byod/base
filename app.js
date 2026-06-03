@@ -61,30 +61,7 @@ if (currentGame) {
 </style>
 
 <script>
-async function initBattery() {
-  if (!navigator.getBattery) {
-    document.getElementById("batteryText").textContent = "N/A";
-    return;
-  }
 
-  const battery = await navigator.getBattery();
-
-  function update() {
-    const level = Math.round(battery.level * 100);
-
-    document.getElementById("batteryText").textContent = level + "%";
-
-    const fill = document.getElementById("batteryLevel");
-    fill.setAttribute("width", (level / 100) * 16);
-  }
-
-  update();
-
-  battery.addEventListener("levelchange", update);
-  battery.addEventListener("chargingchange", update);
-}
-
-initBattery();
 </script>
   
 <div id="fps-counter">FPS: N/A</div>
@@ -104,29 +81,7 @@ initBattery();
 }
 </style>
 
-<script>
-(() => {
-    const fpsCounter = document.getElementById("fps-counter");
 
-    let frames = 0;
-    let lastTime = performance.now();
-
-    function loop(now) {
-        frames++;
-
-        if (now >= lastTime + 1000) {
-            const fps = Math.round((frames * 1000) / (now - lastTime));
-            fpsCounter.textContent = "FPS: " + fps;
-            frames = 0;
-            lastTime = now;
-        }
-
-        requestAnimationFrame(loop);
-    }
-
-    requestAnimationFrame(loop);
-})();
-</script>
 
 
   
@@ -166,6 +121,9 @@ initBattery();
     </button>
     `;
 
+
+
+    
     window.openFullscreen = function () {
       const iframe = document.getElementById("frame");
 
@@ -235,6 +193,78 @@ initBattery();
     }
 
     cloakTab();
+
+
+
+
+
+    
+
+//widgets start//
+
+//fps//
+(() => {
+    const fpsCounter = document.getElementById("fps-counter");
+
+    let frames = 0;
+    let lastTime = performance.now();
+
+    function loop(now) {
+        frames++;
+
+        if (now >= lastTime + 1000) {
+            const fps = Math.round((frames * 1000) / (now - lastTime));
+            fpsCounter.textContent = "FPS: " + fps;
+            frames = 0;
+            lastTime = now;
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+})();
+
+//battery//
+
+
+async function initBattery() {
+  if (!navigator.getBattery) {
+    document.getElementById("batteryText").textContent = "N/A";
+    return;
+  }
+
+  const battery = await navigator.getBattery();
+
+  function update() {
+    const level = Math.round(battery.level * 100);
+
+    document.getElementById("batteryText").textContent = level + "%";
+
+    const fill = document.getElementById("batteryLevel");
+    fill.setAttribute("width", (level / 100) * 16);
+  }
+
+  update();
+
+  battery.addEventListener("levelchange", update);
+  battery.addEventListener("chargingchange", update);
+}
+
+initBattery();
+
+
+//widgets end//
+
+
+
+
+    
+
+
+
+
+    
   })();
 }
 
@@ -258,6 +288,9 @@ window.loadGames = async function () {
     </div>
   `;
 };
+
+
+
 
 
 window.Home = async function () {
