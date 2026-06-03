@@ -116,7 +116,7 @@ initBattery();
 
         if (now >= lastTime + 1000) {
             const fps = Math.round((frames * 1000) / (now - lastTime));
-            fpsCounter.textContent = `FPS: ${fps}`;
+            fpsCounter.textContent = "FPS: " + fps;
             frames = 0;
             lastTime = now;
         }
