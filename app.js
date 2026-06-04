@@ -381,6 +381,14 @@ window.settings = async function () {
 };
 
 
+window.chat = async function () {
+    document.getElementById("games").innerHTML = `
+      <iframe src="/chat/rules.html"></iframe>
+      `;
+};
+
+
+
 window.test = async function () {
     document.getElementById("games").innerHTML = `
       <h1 class="main-text">test</h1>
