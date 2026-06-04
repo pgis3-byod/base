@@ -143,48 +143,13 @@ if (localStorage.getItem("rulesAccepted") === "true") {
 <script>
 function acceptRules(){
     localStorage.setItem("rulesAccepted", "true");
-    location.href = "https://example.com";
+    location.href = "https://pgis-chat.base44.app/?hide-badge=true";
 }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-<script>
-particlesJS('particles-js',{
-  "particles":{
-    "number":{"value":100,"density":{"enable":true,"value_area":800}},
-    "color":{"value":"#ffffff"},
-    "shape":{"type":"circle"},
-    "opacity":{"value":0.08,"random":true},
-    "size":{"value":3,"random":true},
-    "line_linked":{
-      "enable":true,
-      "distance":150,
-      "color":"#ffffff",
-      "opacity":0.4,
-      "width":1
-    },
-    "move":{
-      "enable":true,
-      "speed":1.5,
-      "direction":"none",
-      "straight":false,
-      "out_mode":"out"
-    }
-  },
-  "interactivity":{
-    "detect_on":"window",
-    "events":{
-      "onhover":{"enable":true,"mode":"repulse"},
-      "onclick":{"enable":false}
-    },
-    "modes":{
-      "repulse":{"distance":120,"duration":0.5}
-    }
-  },
-  "retina_detect":true
-});
-</script>
+  
+
 
 </body>
 </html>
