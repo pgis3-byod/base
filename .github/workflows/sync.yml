@@ -1,0 +1,13 @@
+name: Sync All Sites
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel Sync
+        run: curl -X POST ${{ secrets.SYNC_URL }}
