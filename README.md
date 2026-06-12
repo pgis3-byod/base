@@ -9,6 +9,10 @@ PGIS 3 is the third version of pgis, this version has a password to gatekeep the
 [https://math.port0.org](https://math.port0.org)
 
 [https://homework555.netlify.app/](https://homework555.netlify.app/)
+
+[http://math.monedita.cl/](http://math.monedita.cl/)
+
+
 ## Version
 
 **pgis 3 ALPHA**
