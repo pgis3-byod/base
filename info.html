@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Info - PGIS 3</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+
+:root {
+  --bg: black;
+  --text: white;
+}
+
+html, body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,sans-serif;
+  overflow:hidden;
+}
+
+
+.container{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+#main{
+  
+  width:min(800px,90vw);
+  background:rgba(255,255,255,0.06);
+  border:1px solid #444;
+  border-radius:8px;
+  backdrop-filter:blur(8px);
+  padding:30px;
+  text-align: center;
+}
+
+h1{
+  text-align:center;
+  font-family:'Sora',sans-serif;
+
+  background:
+    linear-gradient(
+      115deg,
+      #4a4a4a 0%,
+      #ffffff 10%,
+      #7a7a7a 18%,
+      #f5f5f5 25%,
+      #8c8c8c 32%,
+      #ffffff 40%,
+      #5e5e5e 50%,
+      #ffffff 60%,
+      #9a9a9a 68%,
+      #f0f0f0 76%,
+      #6e6e6e 85%,
+      #ffffff 100%
+    );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-size:300% auto;
+  animation:chrome 20s ease-in-out infinite alternate;
+}
+
+@keyframes chrome{
+  from{background-position:0% 50%;}
+  to{background-position:100% 50%;}
+}
+
+
+    .center {
+      text-align: center;
+    }
+
+
+    .left {
+      text-align: left;
+    }
+    
+    a {
+      color: whitesmoke;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+<div id="main">
+  <h1>PGIS 3 Alpha</h1>
+  <h2>V.3.4.A.⁰</h2>
+<hr>
+  <h3>Version Info</h3>
+  <p class="left">
+    
+VERSION: 3 <br>
+GAMES: 4 <br>
+UPDATE: Alpha <br>
+SUB-UPDATE: 0
+  </p>
+  <hr>
+
+    <h3>Site Info</h3>
+  <p class="left">
+    
+    Current Domain: <span id="domain"></span> <br>
+Local storage:
+  <details id="toggle" class="left">
+  <summary id="label">show</summary>
+    
+    <pre class="left">
+  <code id="localStorage">
+  
+  </code>
+</pre>
+    
+</details>
+
+<script>
+const details = document.getElementById("toggle");
+const label = document.getElementById("label");
+
+function updateLabel() {
+  label.textContent = details.open ? "hide" : "show";
+}
+
+details.addEventListener("toggle", updateLabel);
+updateLabel();
+</script>
+  
+  <hr>
+    <h3>Links</h3>
+  <p class="left">
+    
+    <a href="https://pgis3-byod.vercel.app/" target="_blank">BYOD (bring your own device)</a> <br>
+    <a href="https://github.com/0800WebDev/pgis3" target="_blank">Github repo</a> <br>
+    <a href="https://pgis.x10.mx/" target="_blank">PGIS 2</a> <br>
+    <a href="http://pgis.x10.mx/old.html" target="_blank">PGIS 1 (preview, no longer in use)</a> <br>
+    <a href="https://pgis3.vercel.app" target="_blank">PGIS 3 official link</a>
+<hr>
+    <h3>Official mirrors</h3>
+  <p class="left">
+    
+  <a href="https://test-v3.appwrite.network/" target="_blank">https://test-v3.appwrite.network/</a> <br>
+    <a href="https://math.port0.org/" target="_blank">https://math.port0.org/</a> <br>
+    <a href="https://homework555.netlify.app/" target="_blank">https://homework555.netlify.app/</a> <br>
+    <a href="http://math.monedita.cl/" target="_blank">http://math.monedita.cl/</a> 
+   
+    
+  </p>
+  <hr>
+  <br>
+  <p>This is an alpha build. Features may change and bugs are expected.</p>
+</div>
+  </div>
+ 
+  
+ <script>
+   const currentDomain = window.location.hostname;
+  
+  document.getElementById('domain').textContent = currentDomain;
+   
+   const displayElement = document.getElementById('localStorage');
+
+if (displayElement) {
+    const allData = {};
+for (let i = 0; i < localStorage.length; i++) {
+  const key = localStorage.key(i);
+  allData[key] = localStorage.getItem(key);
+}
+    displayElement.textContent = JSON.stringify(allData, null, 2);
+} 
+
+  </script>
+  
+ 
+
+</body>
+</html>
