@@ -389,7 +389,7 @@ window.chat = async function () {
 
 
 
-window.chat = async function () {
+window.info = async function () {
     document.getElementById("games").innerHTML = `
       <iframe src="/info.html"></iframe>
       `;
